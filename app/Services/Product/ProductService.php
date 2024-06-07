@@ -16,7 +16,9 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     public function getProductFeatured(){
         return [
+            $this->repository->getProductFeatured(0),
             $this->repository->getProductFeatured(1),
+            $this->repository->getProductFeatured(2)
         ];
     }
     public function find(int $id)

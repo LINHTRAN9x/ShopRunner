@@ -1,5 +1,5 @@
 @extends("front.layout.master")
-@section('title','Checkout')
+@section('title','Order Details')
 @section('body')
     <body>
 
@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__text">
-                        <h4>Check Out</h4>
+                        <h4>Order Details</h4>
                         <div class="breadcrumb__links">
                             <a href="./ ">Home</a>
                             <a href="./account/my-order">My Order</a>
@@ -27,156 +27,136 @@
     <section class="checkout spad">
         <div class="container">
             <div class="checkout__form">
-                <form action="" method="post">
-                    @csrf
-                    <div class="row">
-                        <input type="hidden" id="user_id" name="user_id" value="{}">
-                        <div class="col-lg-8 col-md-6" style="background: #f3f2ee;padding: 20px">
-                            <h6 class="checkout__title">Billing Details</h6>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Fist Name<span>*</span></p>
-                                        <input value="{{$orders->first_name}}" type="text" name="first_name">
 
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Last Name<span>*</span></p>
-                                        <input value="{{$orders->last_name}}" type="text" name="last_name">
-
-                                    </div>
-                                </div>
+                    <h2>#{{$orders->id}} ORDER</h2>
+                    <div class="row justify-content-between">
+                        <div class="col-lg-5">
+                            <div class="row border-bottom pt-3">
+                                <p class="col-6 ">Order no.</p>
+                                <p class="col-6 font-weight-bold">{{$orders->id}}</p>
                             </div>
-                            <div class="checkout__input">
-                                <p>Country<span>*</span></p>
-                                <input value="{{$orders->country}}" type="text" name="country">
-
+                            <div class="row border-bottom pt-3">
+                                <p class="col-6">Order status</p>
+                                <p class="col-6 text-warning font-weight-bold">{{\App\Utilities\Constant::$ORDER_STATUS[$orders->status]}}</p>
                             </div>
-                            <div class="checkout__input">
-                                <p>Address<span>*</span></p>
-                                <input value="{{$orders->street_address }}" type="text" placeholder="Street Address" class="checkout__input__add" name="street_address">
-
+                            <div class="row border-bottom pt-3">
+                                <p class="col-6">Shipping method</p>
+                                <p class="col-6 font-weight-bold">{{$orders->shipping_method}}</p>
                             </div>
-                            <div class="checkout__input">
-                                <p>Town/City<span>*</span></p>
-                                <input value="{{$orders->town_city}}" type="text" name="town_city">
-
-                            </div>
-                            <div class="checkout__input">
-                                <p>Postcode / ZIP<span>*</span></p>
-                                <input value="{{$orders->postcode_zip}}" type="text" name="postcode_zip">
-
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Phone<span>*</span></p>
-                                        <input value="{{$orders->phone}}" type="text" name="phone">
-
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Email<span>*</span></p>
-                                        <input value="{{$orders->email}}" type="text" name="email">
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="free_ship">
-                                    Free Shipping (slow delivery)
-                                    <input disabled name="shipping_method"  value="free" type="radio" id="free_ship" {{$orders->shipping_method == 'free' ? 'checked' : ''}}>
-                                    <span class="checkmark"></span>
-
-                                </label>
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="standard">
-                                    Standard (+10$) (medium delivery)
-                                    <input disabled name="shipping_method"  value="standard" type="radio" id="standard" {{$orders->shipping_method == 'standard' ? 'checked' : ''}}>
-                                    <span class="checkmark"></span>
-
-                                </label>
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="express">
-                                    Express (+20$) (fast delivery)
-                                    <input disabled name="shipping_method"  value="express" type="radio" id="express" {{$orders->shipping_method == 'express' ? 'checked' : ''}}>
-                                    <span class="checkmark"></span>
-
-                                </label>
-                            </div>
-                            <div class="text-primary">
-                                {{\App\Utilities\Constant::$ORDER_STATUS[$orders->status]}}
+                            <div class="row border-bottom pt-3">
+                                <p class="col-6">Order date</p>
+                                <p class="col-6 font-weight-bold">{{$orders->created_at}}</p>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="checkout__order">
-                                <h4 class="order__title">Your order</h4>
-                                <div class="checkout__order__products">Product <span>Total</span></div>
-                                <ul class="checkout__total__products">
-                                    @foreach($orders->orderDetails as $item)
-                                        <li>{{ $loop->iteration }}.{{$item->product->name}} x {{$item->qty}} <span>$ {{$item->amount}}</span></li>
-                                    @endforeach
-                                </ul>
-                                <ul class="checkout__total__all">
-                                    <li>Subtotal <span>$ {{ $item->total - $shipping }}</span></li>
-                                    <li>Shipping <span class="shipping-cost">
-                                            ${{$shipping}}</span></li>
-                                        </span></li>
-                                    <li>Coupon <span>
-
-                                            @if($orders->orderDetails->first()->coupon == null)
-                                                0
-                                            @else
-                                                {{ '-'.$orders->orderDetails->first()->coupon.'%'}}
-                                            @endif
-                                        </span></li>
-                                    <li>Total <span>
-{{--                                            @if($orders->shipping_method == 'standard')--}}
-{{--                                                $ {{ array_sum(array_column($orders->orderDetails->toArray(),'total')) + 10}}--}}
-{{--                                            @elseif($orders->shipping_method == 'express')--}}
-{{--                                                $ {{ array_sum(array_column($orders->orderDetails->toArray(),'total')) + 20}}--}}
-{{--                                            @else--}}
-{{--                                                $ {{ array_sum(array_column($orders->orderDetails->toArray(),'total'))}}--}}
-{{--                                            @endif--}}
-                                            $ {{ $orders->orderDetails->first()->total}}
-                                        </span></li>
-                                </ul>
-                                <div class="checkout__input__checkbox">
-                                    <label for="payment">
-                                        COD
-                                        <input disabled type="radio" id="payment" name="payment_type" value="COD" {{$orders->payment_type == 'COD' ? 'checked' : ''}} >
-                                        <span class="checkmark"></span>
-
-                                    </label>
-                                </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="paypal">
-                                        Paypal
-                                        <input disabled type="radio" id="paypal" name="payment_type" value="Paypal" {{$orders->payment_type == 'Paypal' ? 'checked' : ''}}>
-                                        <span class="checkmark"></span>
-
-                                    </label>
-                                </div>
-                                <div class="checkout__input__checkbox">
-                                    <label for="vnpay">
-                                        VNPAY
-                                        <input disabled type="radio" id="vnpay" name="payment_type" value="vnpay" {{$orders->payment_type == 'vnpay' ? 'checked' : ''}}>
-                                        <span class="checkmark"></span>
-                                        @error("payment_type")
-                                        <p class="text-danger">{{$message}}</p>
-                                        @enderror
-                                    </label>
-                                </div>
-
+                        <div class="col-lg-5">
+                            <div class="row border-bottom pt-3">
+                                <p class="col-6">Payment method</p>
+                                <p class="col-6 font-weight-bold">{{$orders->payment_type}}</p>
+                            </div>
+                            <div class="row border-bottom pt-3">
+                                <p class="col-6">Name</p>
+                                <p class="col-6 font-weight-bold">{{$orders->first_name}}{{$orders->last_name}}</p>
+                            </div>
+                            <div class="row border-bottom pt-3">
+                                <p class="col-6">Phone</p>
+                                <p class="col-6 font-weight-bold">{{$orders->phone}}</p>
                             </div>
                         </div>
                     </div>
-                </form>
+                    <div class="row mt-5">
+                        <div class="col-lg-4">
+                            <h6 class="font-weight-bold">SELL-TO ADDRESS</h6>
+                            <p class="text-info">Việt Nam <br> Mỹ Đình, Cầu Giấy, Hà Nội <br> Detech Building 8a Tôn Thất Thuyết</p>
+                        </div>
+                        <div class="col-lg-4">
+                            <h6 class="font-weight-bold">SHIP-TO ADDRESS</h6>
+                            <p class="text-info">{{$orders->country}} <br> {{$orders->town_city}} <br> {{$orders->street_address }}</p>
+
+                        </div>
+
+                        <div class="col-lg-4">3</div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col"></div>
+                        <form action="{{ route('reorder', ['id' => $orders->id]) }}" method="POST" class="row align-self-end">
+                            @csrf
+                            <a href="{{ route('download.bill', ['orderId' => $orders->id]) }}">
+                            <div class="button-dowbill" data-tooltip="Size: ~20Kb">
+                                <div class="button-wrapper-dowbill">
+                                    <div class="text-dowbill">DOWNLOAD ORDER</div>
+                                    <span class="icon-dowbill">
+                                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"></path></svg>
+                                    </span>
+                                </div>
+                            </div>
+                            </a>
+                            <button type="submit" class="btn-reorder font-weight-bold"> <span> REORDER </span></button>
+                        </form>
+
+                    </div>
+                    <h6 class="font-weight-bold mt-3">ORDER PRODUCTS:</h6>
+                    <div class="row mt-4">
+                        <div class="col">
+                            <div class="row border-bottom">
+                                <p class="col-3">Title</p>
+                                <p class="col-1 text-right">Price</p>
+                                <p class="col-2 text-right">Quantity</p>
+                                <p class="col-2 text-right">Size</p>
+                                <p class="col-2 text-right">Color</p>
+                                <p class="col-2 text-right">Total</p>
+                            </div>
+                            @foreach($orders->orderDetails as $item)
+                            <div class="row border-bottom py-2 align-items-center">
+                                <a href="shop/product/{{$item->product->id}}" class="col-3 text-dark font-weight-bold">{{$item->product->name}}</a>
+                                <p class="col-1 text-right font-weight-bold">${{$item->product->discount ?? $item->product->price}}</p>
+                                <p class="col-2 text-right font-weight-bold">{{$item->qty}}</p>
+                                <p class="col-2 text-right font-weight-bold">{{$item->size}}</p>
+                                <p class="col-2 text-right font-weight-bold product__cart__item__text ">
+                                    <span class="c-{{ $item->color }} border border-dark"></span>
+                                </p>
+                                <p class="col-2 text-right font-weight-bold">${{$item->amount * $item->qty}}</p>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="row border-bottom pt-3">
+                                <div class="col"></div>
+                                <div class="row align-items-end">
+                                    <p class="col">Subtotal</p>
+                                    <p class="col font-weight-bold" >${{ $subTotal }}</p>
+                                </div>
+                            </div>
+                            <div class="row border-bottom pt-3">
+                                <div class="col"></div>
+                                <div class="row align-items-end">
+                                    <p class="col">Shipping</p>
+                                    <p class="col font-weight-bold" >${{$shipping}}</p>
+                                </div>
+                            </div>
+                            <div class="row border-bottom pt-3">
+                                <div class="col"></div>
+                                <div class="row align-items-end">
+                                    <p class="col">Coupon</p>
+                                    <p class="col font-weight-bold" >@if($orders->orderDetails->first()->coupon == null)
+                                            0
+                                        @else
+                                            {{ '-'.$orders->orderDetails->first()->coupon.'%'}}
+                                        @endif</p>
+                                </div>
+                            </div>
+                            <div class="row border-bottom pt-3">
+                                <div class="col"></div>
+                                <div class="row align-items-end">
+                                    <p class="col font-weight-bold h5">Total</p>
+                                    <p class="col font-weight-bold h5" >${{ $orders->orderDetails->first()->total}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
             </div>
         </div>
     </section>

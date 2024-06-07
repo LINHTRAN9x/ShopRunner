@@ -45,6 +45,14 @@ return [
     'Train with shop runner'=>'Huấn luyện cùng với shop runner',
     'Optimize your running with a plan adapted for your level.'=>'Tối ưu hóa hoạt động của bạn với kế hoạch phù hợp với trình độ.',
     'Clothing Collections 2024'=>'Bộ sưu tập xuân hè 2024',
-
+    'Men' => 'Nam',
+    'Women' => 'Nữ',
+    'Accessory' => 'Phụ kiện',
+    'Branding' => 'Thương hiệu',
+   'Filter Price' => 'Lọc theo giá',
+    'Size' => 'Kích cỡ',
+    'Colors' => 'Màu sắc',
+    'Support' => 'Hỗ trợ',
+    'The support person will reply soon when online, how can I help you in the meantime?' => 'Người hỗ trợ sẻ trả lời sớm khi online, trong lúc này tôi có thể giúp gì bạn?',
 ];
 

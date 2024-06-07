@@ -25,6 +25,7 @@ class CartController extends Controller
     public function index()
     {
         $carts = Cart::content();
+
         $total = Cart::total();
         $subTotal = Cart::subtotal();
         $locale = Session()->get('locale');
@@ -45,6 +46,7 @@ class CartController extends Controller
             $qty = $request->input('qty', 1);
             $size = $request->input('size'); // Lấy k
             $color = $request->input('color');
+            $quickviewcolor = $request->input('quick-view-color');
 
 
             $response['cart'] = Cart::add([
@@ -56,15 +58,14 @@ class CartController extends Controller
                 'options' => [
                     'images' => $product->productImages,
                     'size' =>  $size,// Thêm kích thước vào tùy chọn của sản phẩm
-                    'color'=> $color
+                    'color'=> $color,
+                    'quick-view-color' => $quickviewcolor,
                 ]
             ]);
             $response['count'] = Cart::count();
             $response['total'] = Cart::total();
 
             return $response;
-
-
 
         }
 
@@ -103,6 +104,65 @@ class CartController extends Controller
         }
     }
 
+    public function cartQuickView(Request $request)
+    {
+        if ($request->ajax()) {
+            $productId = $request->get('product_id');
+//            $product = Product::with(['productImages', 'productDetails', 'productComments'])->findOrFail($productId);
+            $product = $this->productService->find($productId);
+            return response()->json([
+                'name' => $product->name,
+                'description' => $product->description,
+                'price' => $product->price,
+                'discount' => $product->discount,
+                'images' => $product->productImages->toArray(),
+                'avgRating' => $product->avgRating,
+                'reviewsCount' => count($product->productComments),
+                'sizes' => array_unique(array_column($product->productDetails->toArray(), 'size')),
+                'colors' => array_unique(array_column($product->productDetails->toArray(), 'color')),
+                'sku' => $product->sku,
+                'category' => $product->productCategory->name,
+                'brand' => $product->brand->name,
+                'tag' => $product->tag,
+                'id' => $product->id,
+            ]);
+        }
+        return back();
+    }
+
+    public function updateProduct(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $productId = $request->productId;
+            $qty = $request->qty;
+            $size = $request->size;
+            $color = $request->color;
+            $rowId = $request->rowId;
+            $oldProduct = Cart::get($rowId);
+
+            // Cập nhật thông tin sản phẩm trong giỏ hàng
+            Cart::update($rowId, [
+                'qty' => $qty,
+                'options' => [
+                    'images' => $oldProduct->options->images,
+                    'size' => $size,
+                    'color' => $color
+                ]
+            ]);
+
+
+            // Lấy thông tin mới của giỏ hàng
+            $count = Cart::count();
+            $total = Cart::total();
+
+            return response()->json([
+                'count' => $count,
+                'total' => $total
+            ]);
+        }
+        return redirect()->back();
+    }
 
 
 }

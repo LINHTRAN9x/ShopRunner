@@ -45,16 +45,23 @@
                                 <tr data-rowid="{{ $cart->rowId }}">
                                     <td class="product__cart__item">
                                         <div class="product__cart__item__pic">
-                                            <a title="Xem chi tiết sản phẩm {{$cart->name}}" href="shop/product/{{$cart->id}}"><img src="front/img/product/{{ $cart->options->images[0]->path }}" width="100" alt=""></a>
+{{--                                            <a title="Xem chi tiết sản phẩm {{$cart->name}}" href="shop/product/{{$cart->id}}">--}}
+                                                <a title="Edit this product" href="#" data-toggle="modal" data-target="#cart-quickview" value="cart-quickview" class="cart-quickview" data-id_product="{{$cart->id}}">
+                                                    <img src="front/img/product/{{ $cart->options->images[0]->path }}" width="100" alt="">
+                                                </a>
+
+{{--                                            </a>--}}
                                         </div>
                                         <div class="product__cart__item__text">
+                                            <a title="Edit this product" href="#" data-toggle="modal" data-target="#cart-quickview" value="cart-quickview" class="cart-quickview" data-id_product="{{$cart->id}}">
                                             <h6>{{ $cart->name }}</h6>
                                             <h5>${{ number_format($cart->price, 2) }}</h5>
-                                            <h6>{{$cart->options->size}} -
-                                                <span class="c-{{ $cart->options->color }}">
+                                            <h6 class="cart-h6">{{$cart->options->size}} -
+                                                <span class="c-{{ $cart->options->color }} border border-dark">
 
                                                 </span>
                                             </h6>
+                                            </a>
                                         </div>
                                     </td>
                                     <td class="quantity__item">
@@ -110,7 +117,7 @@
             <div class="col-lg-4">
                 <div class="cart__discount">
                     <h6>Discount codes</h6>
-                    <form action="{{url('cart/check_coupon')}}" method="POST">
+                    <form action="{{url('checkout/check_coupon')}}" method="POST">
                         @csrf
                         <input type="text" name="coupon"  placeholder="Coupon code">
                         <button type="submit" name="check_coupon">Apply</button>
@@ -130,6 +137,38 @@
 </section>
 <!-- Shopping Cart Section End -->
 
+<!-- Modal -->
+<form action="{{url('/cart-quickview')}}" method="POST">
+    @csrf
+    <div class="modal cart-modal fade" id="cart-quickview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-rowid="">
+        <div class="modal-dialog">
+            <div class="modal-content-product-cart">
+                <div class="modal-header modal-header-cart">
+                    <a style="--clr: #4C7F78" class="detail-button" href="shop/product/">
+                        <span class="button__icon-wrapper">
+                            <svg width="10" class="button__icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 15">
+                                <path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
+                            </svg>
+
+                            <svg class="button__icon-svg  button__icon-svg--copy" xmlns="http://www.w3.org/2000/svg" width="10" fill="none" viewBox="0 0 14 15">
+                                <path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
+                            </svg>
+                        </span>
+                        <div class="modal-title" style="--clr: #7808d0">  </div>
+                    </a>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="icon_close font-weight-bold" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body-product d-flex p-2">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 
 @endsection
+
+

@@ -14,6 +14,7 @@
                     <div class="breadcrumb__links">
                         <a href="./ ">Home</a>
                         <a href="./shop">Shop</a>
+                        <a href="./cart">Shopping Cart</a>
                         <span>Check Out</span>
                     </div>
                 </div>
@@ -106,11 +107,11 @@
                         <div class="checkout__input">
                             <p>Order notes<span></span></p>
                             <input type="text"
-                                   placeholder="Notes about your order, e.g. special notes for delivery.">
+                                   placeholder="Notes about your order, e.g. special notes for delivery." name="note">
                         </div>
                         <div class="checkout__input__checkbox">
                             <label for="free_ship">
-                                Free Shipping (slow delivery) -> {{  \Carbon\Carbon::now()->addDay(4)->format('d-m-Y')  }}
+                                Free Shipping <i class="fa fa-truck"></i> [{{  \Carbon\Carbon::now()->addDay(4)->format('d-m-Y')  }}]
                                 <input class="shipping_method" name="shipping_method"  value="free" type="radio" id="free_ship">
                                 <span class="checkmark"></span>
                                 @error("shipping_method")
@@ -120,7 +121,7 @@
                         </div>
                         <div class="checkout__input__checkbox">
                             <label for="standard">
-                                Standard (+10$) (medium delivery) -> {{  \Carbon\Carbon::now()->addDay(2)->format('d-m-Y')  }}
+                                Standard (+10$) <i class="fa fa-truck"></i> [{{  \Carbon\Carbon::now()->addDay(2)->format('d-m-Y')  }}]
                                 <input class="shipping_method" name="shipping_method"  value="standard" type="radio" id="standard">
                                 <span class="checkmark"></span>
                                 @error("shipping_method")
@@ -130,7 +131,7 @@
                         </div>
                         <div class="checkout__input__checkbox">
                             <label for="express">
-                                Express (+20$) (fast delivery) -> {{  \Carbon\Carbon::now()->addDay(1)->format('d-m-Y')  }}
+                                Express (+20$) <i class="fa fa-truck"></i> [{{  \Carbon\Carbon::now()->addDay(1)->format('d-m-Y')  }}]
                                 <input class="shipping_method" name="shipping_method"  value="express" type="radio" id="express">
                                 <span class="checkmark"></span>
                                 @error("shipping_method")
@@ -139,6 +140,8 @@
                             </label>
                         </div>
                     </div>
+
+            </form>
                     <div class="col-lg-4 col-md-6">
                         <div class="checkout__order">
                             <div class="cart__discount1">
@@ -167,7 +170,7 @@
                                                 @if($cou['coupon_condition'] == 1)
                                                     <div>
                                                         -{{$cou['coupon_number']}}%
-                                                        <a href="{{url('checkout/delete_coupon')}}" class="icon_close border font-weight-bold" title="Delete"></a>
+                                                        <a href="{{url('checkout/delete_coupon')}}" class="icon_close text-dark border font-weight-bold" title="Delete"></a>
                                                     </div>
                                                     @php
                                                     $total_coupon = ($total*$cou['coupon_number']) / 100;
@@ -231,7 +234,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
+
 
         </div>
     </div>

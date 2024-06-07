@@ -44,7 +44,14 @@ return [
     'Train with shop runner'=>'Train with shop runner',
     'Optimize your running with a plan adapted for your level.'=>'Optimize your running with a plan adapted for your level.',
     'Clothing Collections 2024'=>'Clothing Collections 2024',
-
-
+    'Men' => 'Men',
+    'Women' => 'Women',
+    'Accessory' => 'Accessory',
+    'Branding' => 'Branding',
+    'Filter Price' => 'Filter Price',
+    'Size' => 'Size',
+    'Colors' => 'Colors',
+    'Support' => 'Support',
+    'The support person will reply soon when online, how can I help you in the meantime?' => 'The support person will reply soon when online, how can I help you in the meantime?',
 ];
 

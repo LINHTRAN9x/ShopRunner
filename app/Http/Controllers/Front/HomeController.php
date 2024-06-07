@@ -24,6 +24,7 @@ class HomeController extends Controller
     public function home()
     {
         $featuredProducts = $this->productService->getProductFeatured();
+
         $productRating = $this->productCommentService->all();
         $locale = Session()->get('locale');
 
@@ -33,7 +34,13 @@ class HomeController extends Controller
             $favouriteCount = Favourite::where('user_id', $userId)->count();
         }
 
+        $favourites = [];
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $favourites = Favourite::where('user_id', $userId)->pluck('product_id')->toArray();
+        }
 
-        return view('front.index',compact('featuredProducts','productRating','locale','favouriteCount'));
+
+        return view('front.index',compact('featuredProducts','productRating','locale','favourites','favouriteCount'));
     }
 }

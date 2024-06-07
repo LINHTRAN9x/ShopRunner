@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
@@ -18,6 +19,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function getProductFeatured(int $featuredId)
     {
+        if ($featuredId == 1) {
+            $tenDaysAgo = Carbon::now()->subDays(10);
+
+            return $this->model->where('featured', $featuredId)
+                ->where('created_at', '>=', $tenDaysAgo)
+                ->orderBy('id', 'desc')
+                ->get();
+        }
         return $this->model->where('featured', $featuredId)
             ->orderBy("id","desc")
             ->get();
@@ -32,7 +41,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function getProductOnIndex($request)
     {
-
+        //SEARCH
         $search = $request->search ?? '';
 
         $products = $this->model->where("name",'like','%'.$search.'%');
@@ -111,6 +120,12 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     private function filter($products, Request $request)
     {
+
+        //category
+        $categories = $request->category ?? [];
+        $category_ids = array_keys($categories);
+        $products = !empty($category_ids) ? $products->whereIn('id', $category_ids) : $products;
+
         //Brand
         $brands = $request->brand ?? [];
         $brands_ids = array_keys($brands);

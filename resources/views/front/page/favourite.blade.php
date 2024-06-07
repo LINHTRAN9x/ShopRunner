@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__text">
-                        <h4>Shopping Cart</h4>
+                        <h4>My Favourite</h4>
                         <div class="breadcrumb__links">
                             <a href="./">Home</a>
 
@@ -47,9 +47,7 @@
                                     </td>
                                     <td class="">
                                         <div class="product__cart__item__pic">
-                                            <img src="{{ asset('front/img/product/' . $item->product->productImages[0]->path) }}" width="100" alt="">
-
-
+                                            <img src="{{ asset('front/img/product/' . $item->product->productImages[0]->path) }}" width="100" height="100" alt="" style="object-fit: cover">
 
                                         </div>
 
@@ -57,7 +55,6 @@
 
                                     <td class="my_order_products">
                                         {{$item->product->name}}
-
 
                                     </td>
 
@@ -67,7 +64,18 @@
 
                                     </td>
                                     <td>
-                                        <a href="./shop/product/{{$item->product->id}}">More...</a>
+                                        <a href="./shop/product/{{$item->product->id}}">
+                                            <button class="my-order-button">
+                                                See Now
+                                                <svg fill="currentColor" viewBox="0 0 24 24" class="icon">
+                                                    <path
+                                                        clip-rule="evenodd"
+                                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+                                                        fill-rule="evenodd"
+                                                    ></path>
+                                                </svg>
+                                            </button>
+                                        </a>
                                     </td>
                                     <td class="cart__close">
                                         <a href="./favourite/remove/{{$item->product->id}}"  ><i class="fa fa-close"></i></a>

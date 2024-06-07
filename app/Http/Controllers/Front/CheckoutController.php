@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Models\Favourite;
 use App\Models\OrderDetail;
+use App\Models\ProductDetail;
 use App\Services\Order\OrderServiceInterface;
 use App\Services\OrderDetail\OrderDetailServiceInterface;
 use App\Services\Product\ProductServiceInterface;
@@ -34,6 +35,11 @@ class CheckoutController extends Controller
     public function index()
     {
         $carts = Cart::content();
+        // Check if the cart is empty
+        if ($carts->isEmpty()) {
+            // Redirect to the shopping cart page or display a message
+            return redirect()->route('cart.index')->with('message', 'Your cart is empty.');
+        }
         $total = Cart::total();
         $subTotal = Cart::subtotal();
         $locale = Session()->get('locale');
@@ -129,7 +135,7 @@ class CheckoutController extends Controller
             ];
             // Nếu tổng số tiền cuối cùng đã được tính toán từ trước (đã trừ mã coupon)
             if ($totalAmount > 0) {
-                // Cập nhật giá trị total
+
                 $data['total'] = $totalAmount;
             } else {
                 // Nếu không có mã coupon, giữ nguyên giá trị total
@@ -145,6 +151,21 @@ class CheckoutController extends Controller
 
             // Thêm chi tiết đơn hàng
             $this->orderDetailService->create($data);
+
+            // Giảm số lượng sản phẩm trong bảng product_details
+            $productDetail = ProductDetail::where('product_id', $cartItem->id)
+                ->where('size', $cartItem->options->size)
+                ->where('color', $this->pickColor($cartItem->options->color))
+                ->first();
+
+            if ($productDetail) {
+                $productDetail->qty -= $cartItem->qty;
+                if ($productDetail->qty <= 0) {
+                    $productDetail->delete();
+                } else {
+                    $productDetail->save();
+                }
+            }
         }
 
         if ($request->payment_type == 'COD') {
@@ -219,6 +240,7 @@ class CheckoutController extends Controller
                     ]
                 ]
             ]);
+            $this->orderService->update(['status'=>Constant::ORDER_STATUS_PAID],$order->id);
             $total = $totalAmount;
             $subTotal = Cart::subtotal();
             if ($couponsInSession){
@@ -387,9 +409,16 @@ class CheckoutController extends Controller
         if ($latestOrderDetail) {
 
             $order = $latestOrderDetail->order;
+            $orderDetails = $order->orderDetails;
             $total += $latestOrderDetail->total;
             $orderProducts = $order->orderDetails;
             $shipping = 0;
+            $subTotal = 0;
+
+            foreach ($orderDetails as $item) {
+                $subTotal += $item->amount * $item->qty;
+            }
+
 
             if ($order->shipping_method == 'express'){
                 $shipping = 20;
@@ -435,7 +464,7 @@ class CheckoutController extends Controller
             Session::forget('coupon');
 
 
-            return view('front.checkout.thank-you', compact('orderProducts','order','shipping','discount','total','amount','locale','favouriteCount'));
+            return view('front.checkout.thank-you', compact('orderProducts','order','subTotal','shipping','discount','total','amount','locale','favouriteCount'));
         } else {
             // Xử lý khi không tìm thấy thông tin đơn hàng gần nhất
             // ...
@@ -487,6 +516,19 @@ class CheckoutController extends Controller
         return redirect()->back();
     }
 
-
+    public function pickColor($color) {
+        switch ($color) {
+            case '1': return 'black';
+            case '2': return 'darkblue';
+            case '3': return 'orange';
+            case '4': return 'grey';
+            case '5': return 'lightblack';
+            case '6': return 'pink';
+            case '7': return 'violet';
+            case '8': return 'red';
+            case '9': return 'white';
+            default: return '';
+        }
+    }
 
 }

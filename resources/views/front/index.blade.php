@@ -191,41 +191,47 @@
             <div class="row">
                 <div class="col-lg-12">
                     <ul class="filter__controls">
-                        <li class="active" data-filter=".best-sellers">@if($locale == 'vi'){{ __('vi.Best Sellers') }}@else{{ __('en.Best Sellers') }}@endif</li>
-                        <li data-filter=".new-arrivals">@if($locale == 'vi'){{ __('vi.New Arrivals') }}@else{{ __('en.New Arrivals') }}@endif</li>
+                        <li data-filter=".best-sellers">@if($locale == 'vi'){{ __('vi.Best Sellers') }}@else{{ __('en.Best Sellers') }}@endif</li>
+                        <li class="active" data-filter=".new-arrivals">@if($locale == 'vi'){{ __('vi.New Arrivals') }}@else{{ __('en.New Arrivals') }}@endif</li>
                         <li data-filter=".hot-sales">@if($locale == 'vi'){{ __('vi.Hot Sales') }}@else{{ __('en.Hot Sales') }}@endif</li>
                     </ul>
                 </div>
             </div>
             <div class="row product__filter">
-                @foreach($featuredProducts['0'] as $item)
-                        <?php
-                        $tags = ['new-arrivals', 'hot-sales','best-sellers'];
-
-                        $randomTag = $tags[array_rand($tags)];
-                        ?>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix {{$randomTag}}">
+                @foreach($featuredProducts as $category => $products)
+                @foreach($products as $item)
+                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix @if($item->featured == 1) new-arrivals
+                @elseif($item->featured == 0) best-sellers @elseif($item->featured == 2) hot-sales
+                  @endif">
                     <div class="product__item">
                         <div class="product__item__pic set-bg" data-setbg="front/img/product/{{$item->productImages[0]->path}}">
 
-                            @if($randomTag == 'new-arrivals')
+                            @if($item->featured == '1')
                                 <span class="label">New</span>
-                            @elseif($randomTag == 'hot-sales')
+                            @elseif($item->featured == '2')
                                 <span class="label">Hot Sale</span>
-                            @elseif($randomTag == 'best-sellers')
+                            @elseif($item->featured == '0')
                                 <span class="label">Best Sale</span>
                             @endif
 
                             <ul class="product__hover">
-                                <li><a href="javascript:addFav({{ $item->id }})"><img src="front/img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="front/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                                @php
+                                    $isFavourite = in_array($item->id, $favourites);
+                                @endphp
+                                <li>
+                                    <a href="javascript:addFav({{ $item->id }})">
+                                        <img class="{{ $isFavourite ? 'icon-heart' : '' }}" src="front/img/icon/heart.png" alt="">
+                                    </a>
+                                </li>
+                                <li><a href="shop/product/{{$item->id}}"><img src="front/img/icon/view.png" alt=""> <span>View details</span></a></li>
                                 <li><a href="#"><img src="front/img/icon/search.png" alt=""></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
                             <h6>{{$item->name}}</h6>
-                            <a href="javascript:addCart({{$item->id}})" class="add-cart">+ @if($locale == 'vi'){{ __('vi.Add To Cart') }}@else{{ __('en.Add To Cart') }}@endif</a>
-                            <a href="shop/product/{{$item->id}}" class="quick-view"><i class="fa fa-eye"></i>@if($locale == 'vi'){{ __('vi.Quick view') }}@else{{ __('en.Quick view') }}@endif</a>
+                            <a href="javascript:addCartQuick({{$item->id}})" class="add-cart">+ @if($locale == 'vi'){{ __('vi.Add To Cart') }}@else{{ __('en.Add To Cart') }}@endif</a>
+{{--                            <a href="shop/product/{{$item->id}}" class="quick-view"><i class="fa fa-eye"></i>@if($locale == 'vi'){{ __('vi.Quick view') }}@else{{ __('en.Quick view') }}@endif</a>--}}
+                            <a href="#" data-toggle="modal" data-target="#quick-view" value="quick-view" class="quick-view" data-id_product="{{$item->id}}"><i class="fa fa-eye"></i>Quick view</a>
 
                             <div class="rating">
                                 @php
@@ -307,6 +313,7 @@
                         </div>
                     </div>
                 </div>
+                @endforeach
                 @endforeach
             </div>
         </div>
@@ -563,7 +570,36 @@
             </div>
         </div>
     </section>
+    <!-- Modal -->
+    <form action="{{url('/quick-view')}}" method="POST">
+        @csrf
+        <div class="modal fade" id="quick-view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content-product">
+                    <div class="modal-header">
+                        <a style="--clr: #7808d0" class="detail-button" href="#">
+                        <span class="button__icon-wrapper">
+                            <svg width="10" class="button__icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 15">
+                                <path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
+                            </svg>
 
+                            <svg class="button__icon-svg  button__icon-svg--copy" xmlns="http://www.w3.org/2000/svg" width="10" fill="none" viewBox="0 0 14 15">
+                                <path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
+                            </svg>
+                        </span>
+                            <div class="modal-title" style="--clr: #7808d0">  </div>
+                        </a>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="icon_close font-weight-bold" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body-product d-flex p-2">
+                        ...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     <!-- Latest Blog Section End -->
 
 @endsection

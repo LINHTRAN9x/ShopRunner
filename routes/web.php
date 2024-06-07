@@ -9,6 +9,7 @@ use \App\Http\Controllers\Front\CartController;
 use \App\Http\Controllers\Front\CheckoutController;
 use \App\Http\Controllers\Front\HomeController;
 use \App\Http\Controllers\Front\FavouriteController;
+use \App\Http\Controllers\BotManController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,16 +30,20 @@ Route::get('/contacts',[Controller::class,'contacts']);
 Route::prefix('shop')->group(function (){
     Route::get('/product/{id}',[ShopController::class,'show']);
     Route::post('/product/{id}',[ShopController::class,'postComment']);
-    Route::get('/quick-view',[ShopController::class,'quickView']);
+    Route::get('/product/delete/{id}',[ShopController::class,'deleteComment']);
     Route::get('',[ShopController::class,'index']);
     Route::get('category/{categoryName}',[ShopController::class,'category']);
     Route::get('brand/{brandName}',[ShopController::class,'brand']);
 
 });
+Route::POST('/quick-view',[ShopController::class,'quickView']);
+Route::POST('/cart-quickview',[CartController::class,'cartQuickView']);
+Route::get('/getProductDetails',[ShopController::class,'getProductDetails']);
 
 Route::prefix('cart')->group(function (){
     Route::get('add',[CartController::class,'add']);
-    Route::get('/',[CartController::class,'index']);
+    Route::post('update-product',[CartController::class,'updateProduct']);
+    Route::get('/',[CartController::class,'index'])->name('cart.index');
     Route::get('delete',[CartController::class,'delete']);
     Route::get('destroy',[CartController::class,'destroyCart']);
     Route::get('update',[CartController::class,'update']);
@@ -53,7 +58,7 @@ Route::prefix('favourite')->middleware('CheckUserLogin')->group(function (){
 });
 
 Route::prefix('checkout')->middleware('CheckUserLogin')->group(function (){
-    Route::get('',[CheckoutController::class,'index']);
+    Route::get('',[CheckoutController::class,'index'])->name('checkout');
     Route::post('/',[CheckoutController::class,'addOrder'])->name('checkout.addOrder');;
     Route::get('/thank-you',[CheckoutController::class,'thankYou']);
     Route::get('/vnPayCheck',[CheckoutController::class,'vnPayCheck']);
@@ -80,7 +85,30 @@ Route::prefix('account')->group(function (){
     Route::prefix('my-order')->middleware('CheckUserLogin')->group(function (){
         Route::get('/',[AccountController::class,'myOrder']);
         Route::get('{id}',[AccountController::class,'myOrderDetails']);
+        Route::get('/download-bill/{orderId}', [AccountController::class, 'downloadBill'])->name('download.bill');
+        Route::post('/orders/search', [AccountController::class, 'search']);
+        Route::get('orders/search', [AccountController::class, 'search'])->name('orders.search');
+    });
+    Route::prefix('profile')->middleware('CheckUserLogin')->group(function (){
+        Route::get('/',[AccountController::class,'profile']);
+        Route::post('/update-user', [AccountController::class, 'updateUser'])->name('updateUser');
     });
 });
+
+Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
+Route::get('/tinker', [BotManController::class, 'tinker']);
+Route::view('/botman/chat', 'vendor.botman.tinker');
+
+Route::post('botman/message', [BotManController::class, 'sendMessage']);
+
+Route::get('open-api',[\App\Http\Controllers\ChatgptController::class,'index']);
+
+Route::post('/orders/reorder/{id}', [AccountController::class, 'reOrder'])->name('reorder');
+
+
+
+
+
+
 
 

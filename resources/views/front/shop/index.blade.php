@@ -41,14 +41,39 @@
                         <div class="accordion" id="accordionExample">
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                    <a data-toggle="collapse" data-target="#collapseOne">@if($locale == 'vi'){{ __('vi.Categories') }}@else{{ __('en.Categories') }}@endif</a>
                                 </div>
                                 <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__categories" >
                                             <ul class="nice-scroll">
                                                 @foreach($categories as $category)
-                                                <li><a href="/shop/category/{{ $category->name }}">{{ $category->name }}</a></li>
+                                                <li><a href="/shop/category/{{ $category->name }}">
+                                                        @switch($category->name)
+                                                            @case('Men')
+                                                                @if($locale == 'vi')
+                                                                    {{ __('vi.Men') }}
+                                                                @else
+                                                                    {{ __('en.Men') }}
+                                                                @endif
+                                                                @break
+                                                            @case('Women')
+                                                                @if($locale == 'vi')
+                                                                    {{ __('vi.Women') }}
+                                                                @else
+                                                                    {{ __('en.Women') }}
+                                                                @endif
+                                                                @break
+                                                            @case('Accessory')
+                                                                @if($locale == 'vi')
+                                                                    {{ __('vi.Accessory') }}
+                                                                @else
+                                                                    {{ __('en.Accessory') }}
+                                                                @endif
+                                                                @break
+                                                            @default
+                                                                {{ $category->name }}
+                                                        @endswitch</a></li>
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -57,7 +82,7 @@
                             </div>
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
+                                    <a data-toggle="collapse" data-target="#collapseTwo">@if($locale == 'vi'){{ __('vi.Branding') }}@else{{ __('en.Branding') }}@endif</a>
                                 </div>
                                 <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
@@ -68,7 +93,6 @@
                                                     <input type="checkbox" {{ (request('brand')[$brand->id] ?? '') == 'on' ? 'checked' : ''}}
                                                                 id="bc-{{$brand->id}}" name="brand[{{$brand->id}}]"
                                                                 onchange="this.form.submit();">
-                                                    <span class="checkmark"></span>
                                                 </label>
                                             @endforeach
                                         </div>
@@ -77,7 +101,7 @@
                             </div>
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                    <a data-toggle="collapse" data-target="#collapseThree">@if($locale == 'vi'){{ __('vi.Filter Price') }}@else{{ __('en.Filter Price') }}@endif</a>
                                 </div>
                                 <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
@@ -97,7 +121,7 @@
                             </div>
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseFour">Size</a>
+                                    <a data-toggle="collapse" data-target="#collapseFour">@if($locale == 'vi'){{ __('vi.Size') }}@else{{ __('en.Size') }}@endif</a>
                                 </div>
                                 <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
@@ -140,7 +164,7 @@
                             </div>
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseFive">Colors</a>
+                                    <a data-toggle="collapse" data-target="#collapseFive">@if($locale == 'vi'){{ __('vi.Colors') }}@else{{ __('en.Colors') }}@endif</a>
                                 </div>
                                 <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
@@ -246,9 +270,10 @@
                 </div>
                 <div class="row">
                     @foreach($products as $product)
-                        @include("front.components.product-item")
+                            @include("front.components.product-item")
                     @endforeach
                 </div>
+
                 <div class="row">
                     <div class="col-lg-12">
 

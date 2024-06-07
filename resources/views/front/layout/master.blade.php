@@ -12,6 +12,8 @@
     <title>@yield('title') | Shop Runner</title>
 
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/css/chat.min.css">
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,11 +33,11 @@
 </head>
 
 <body>
-<div id="custom-alert" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black; z-index: 1000;">
+<div id="custom-alert" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black; z-index: 10002;">
     <p id="custom-alert-message"></p>
     <button onclick="hideCustomAlert()">OK</button>
 </div>
-<div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+<div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10001;"></div>
 
 <div id="alertMessage">
 </div>
@@ -122,7 +124,7 @@
 <header class="header">
     <div class="header__top">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-lg-6 col-md-7">
                     <div class="header__top__left">
                         <p>
@@ -136,7 +138,12 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
-                    <div class="header__top__right">
+                    <div class="header__top__right align-items-center">
+{{--                        <label class="switch">--}}
+{{--                            <input type="checkbox">--}}
+{{--                            <span class="slider"></span>--}}
+
+{{--                        </label>--}}
                         <div class="header__top__links">
 
                             <a href="#">FAQs</a>
@@ -148,7 +155,7 @@
                                     @elseif($locale == 'vi')
                                     <img src="front/img/icon/vn-icon.png" width="25" alt="">
                                     @else
-                                    <img src="front/img/icon/vn-icon.png" width="25" alt="">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/5111/5111640.png" width="25" alt="">
                                     @endif
                                 <i class="arrow_carrot-down"></i>
                             </span>
@@ -168,10 +175,10 @@
 
                         <div class="header__top__hover">
                             @if(Auth::check())
-                                <span><a href="#"><img style="border-radius: 50%;background: #ffffff" src="{{ Auth::user()->avatar == null ? 'front/img/user/default-avatar.png' : 'front/img/user/' . Auth::user()->avatar }}" width="25" alt=""> {{ Auth::user()->name }}</a> <i class="arrow_carrot-down"></i></span>
+                                <span><a href="#"><img style="border-radius: 50%;background: #ffffff" src="{{ Auth::user()->avatar == null ? 'front/img/user/default-avatar.png' : 'front/img/user/' . Auth::user()->avatar }}" width="25" height="25" alt=""> {{ Auth::user()->name }}</a> <i class="arrow_carrot-down"></i></span>
                                 <ul>
                                     <li><a href="./account/my-order"><button type="submit" class="btn logout-btn">My Orders</button></a></li>
-                                    <li><button type="submit" class="btn logout-btn">Settings</button></li>
+                                    <li><a href="./account/profile"><button type="submit" class="btn logout-btn">Profile</button></a></li>
                                     <li><button type="submit" class="btn logout-btn">News</button></li>
                                     <li>
 
@@ -180,7 +187,7 @@
                                     </li>
                                 </ul>
                             @else
-                                    <a href="./account/login"><i class="fa fa-user"></i>
+                                    <a href="./account/login" class="comic-button"><i class="fa fa-user"></i>
                                         @if($locale == 'vi')
                                             {{ __('vi.Become a member') }}
                                         @else
@@ -271,17 +278,16 @@
                     <div class="footer__logo">
                         <a href="./"><img src="front/img/shop-runner-logo-svg-white-2.svg" width=200 height=68 alt=""></a>
                     </div>
-                    <p>Shop Runner đem đến cộng đồng yêu thể thao các sản phẩm dành cho vận động viên chạy bộ
-                        & ba môn phối hợp gồm: Quần áo chạy bộ chuyên dụng, Phụ kiện (Mũ, Vest nước, Bó bắp, Khăn, Belt, Bình nước v.v...)
-                        và Dinh dưỡng.</p>
+                    <p>Shop Runner brings to the sports-loving community products for runners & triathletes including:
+                        Specialized running clothes, Accessories (Hat, Water vest, Corn bundle, Towel, Belt, Water bottle etc.) and Nutrition.</p>
                     <a href="#"><img src="front/img/payment.png" alt=""></a>
                 </div>
             </div>
             <div class="col-lg-4 offset-lg-1 col-md-3 col-sm-6">
                 <div class="footer__widget">
-                    <h6>THÔNG TIN LIÊN HỆ</h6>
+                    <h6>CONTACT INFO</h6>
                     <ul>
-                        <li><a href="#">Địa chỉ: Detech Building 8a Tôn Thất Thuyết, Mỹ Đình, Cầu Giấy, Hà Nội</a></li>
+                        <li><a href="#">Address: Detech Building 8a Tôn Thất Thuyết, Mỹ Đình, Cầu Giấy, Hà Nội</a></li>
                         <li><a href="#">Hotline: 096 848 9910</a></li>
                         <li><a href="#">Email: runnershop.vn@gmail.com</a></li>
                         <li><a href="#">Sale</a></li>
@@ -309,7 +315,37 @@
                     <a href="#"><img style="margin: 0" src="front/img/icon/youtube.svg" width="30" alt=""></a>
                     <a href="#"><img  style="margin: 0" src="front/img/icon/in.svg" width="30" alt=""></a>
                 </p>
+                <a href="#" onclick="document.body.scrollTop=0;document.documentElement.scrollTop=0;event.preventDefault()">
+                <button class="back-to-top-btn">
+                    <div class="text">
+                        <span>Back</span>
+                        <span>to</span>
+                        <span>top</span>
+                    </div>
+                    <div class="clone">
+                        <span>Back</span>
+                        <span>to</span>
+                        <span>top</span>
+                    </div>
+                    <svg
+                        stroke-width="2"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        class="h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20px"
+                    >
+                        <path
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            stroke-linejoin="round"
+                            stroke-linecap="round"
+                        ></path>
+                    </svg>
+                </button>
+                </a>
             </div>
+
         </div>
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -381,7 +417,65 @@
         </div>
 
 @endif
+<div class="support">
+    <a href="#" id="support-link">@if($locale == 'vi'){{ __('vi.Support') }}@else{{ __('en.Support') }}@endif</a>
 
+</div>
+<div class="support_menu">
+    <a href="{{url('/tinker')}}">BOTMAN</a>
+    <div class="mb-5" id="chat">
+        <form action="{{url('/botman')}}" method="post" id="message-form">
+            @csrf
+            <div class="card-chat">
+                <div class="chat-header">Chat</div>
+                <div class="chat-window">
+                    <ul class="message-list">
+                        <div class="admin-message">✋ Hi, I'm botman.@if($locale == 'vi'){{ __('vi.The support person will reply soon when online, how can I help you in the meantime?') }}@else{{ __('en.The support person will reply soon when online, how can I help you in the meantime?') }}@endif</div>
+                    </ul>
+                    <div class="loading">
+                        <div class="dot-wave">
+                            <div class="dot-wave__dot"></div>
+                            <div class="dot-wave__dot"></div>
+                            <div class="dot-wave__dot"></div>
+                            <div class="dot-wave__dot"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input name="message" type="text" class="message-input" placeholder="Type your message here">
+                    <button type="submit" class="send-button">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <a href="#">
+        <button class="gg-button">
+            <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 256 262">
+                <path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"></path>
+                <path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"></path>
+                <path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782"></path>
+                <path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"></path>
+            </svg>
+            Continue with Google
+        </button></a>
+    <a href="#">
+        <button class="fb-button">
+            <svg stroke="#ffffff" xml:space="preserve" viewBox="-143 145 512 512" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Layer_1" version="1.1" fill="#ffffff"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"> <path d="M329,145h-432c-22.1,0-40,17.9-40,40v432c0,22.1,17.9,40,40,40h432c22.1,0,40-17.9,40-40V185C369,162.9,351.1,145,329,145z M169.5,357.6l-2.9,38.3h-39.3v133H77.7v-133H51.2v-38.3h26.5v-25.7c0-11.3,0.3-28.8,8.5-39.7c8.7-11.5,20.6-19.3,41.1-19.3 c33.4,0,47.4,4.8,47.4,4.8l-6.6,39.2c0,0-11-3.2-21.3-3.2c-10.3,0-19.5,3.7-19.5,14v29.9H169.5z"></path> </g></svg>
+            Chat with Facebook
+        </button>
+    </a>
+    <a href="#">
+        <button class="zl-button">
+            <svg class="zl-svg" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
+                <path fill="#2962ff" d="M15,36V6.827l-1.211-0.811C8.64,8.083,5,13.112,5,19v10c0,7.732,6.268,14,14,14h10	c4.722,0,8.883-2.348,11.417-5.931V36H15z"></path><path fill="#eee" d="M29,5H19c-1.845,0-3.601,0.366-5.214,1.014C10.453,9.25,8,14.528,8,19	c0,6.771,0.936,10.735,3.712,14.607c0.216,0.301,0.357,0.653,0.376,1.022c0.043,0.835-0.129,2.365-1.634,3.742	c-0.162,0.148-0.059,0.419,0.16,0.428c0.942,0.041,2.843-0.014,4.797-0.877c0.557-0.246,1.191-0.203,1.729,0.083	C20.453,39.764,24.333,40,28,40c4.676,0,9.339-1.04,12.417-2.916C42.038,34.799,43,32.014,43,29V19C43,11.268,36.732,5,29,5z"></path><path fill="#2962ff" d="M36.75,27C34.683,27,33,25.317,33,23.25s1.683-3.75,3.75-3.75s3.75,1.683,3.75,3.75	S38.817,27,36.75,27z M36.75,21c-1.24,0-2.25,1.01-2.25,2.25s1.01,2.25,2.25,2.25S39,24.49,39,23.25S37.99,21,36.75,21z"></path><path fill="#2962ff" d="M31.5,27h-1c-0.276,0-0.5-0.224-0.5-0.5V18h1.5V27z"></path><path fill="#2962ff" d="M27,19.75v0.519c-0.629-0.476-1.403-0.769-2.25-0.769c-2.067,0-3.75,1.683-3.75,3.75	S22.683,27,24.75,27c0.847,0,1.621-0.293,2.25-0.769V26.5c0,0.276,0.224,0.5,0.5,0.5h1v-7.25H27z M24.75,25.5	c-1.24,0-2.25-1.01-2.25-2.25S23.51,21,24.75,21S27,22.01,27,23.25S25.99,25.5,24.75,25.5z"></path><path fill="#2962ff" d="M21.25,18h-8v1.5h5.321L13,26h0.026c-0.163,0.211-0.276,0.463-0.276,0.75V27h7.5	c0.276,0,0.5-0.224,0.5-0.5v-1h-5.321L21,19h-0.026c0.163-0.211,0.276-0.463,0.276-0.75V18z"></path>
+            </svg>
+            Chat with ZALO
+        </button>
+    </a>
+
+
+    <div class="support_menu_close">Click outside to close the tab</div>
+</div>
 <!-- Js Plugins -->
 <script src="front/js/jquery-3.3.1.min.js"></script>
 <script src="front/js/bootstrap.min.js"></script>
