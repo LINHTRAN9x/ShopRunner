@@ -65,6 +65,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function getProductsByCategory($categoryName, $request)
     {
+
         $products = ProductCategory::where('name',$categoryName)->first()->products->toQuery();
 
         // Lấy tham số lọc giá
@@ -120,11 +121,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     private function filter($products, Request $request)
     {
-
         //category
         $categories = $request->category ?? [];
         $category_ids = array_keys($categories);
-        $products = !empty($category_ids) ? $products->whereIn('id', $category_ids) : $products;
+        $products = $category_ids != null ? $products->whereIn('product_category_id', $category_ids) : $products;
 
         //Brand
         $brands = $request->brand ?? [];

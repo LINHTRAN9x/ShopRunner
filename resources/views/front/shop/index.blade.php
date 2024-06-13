@@ -35,7 +35,7 @@
                         </form>
 
                     </div>
-                    <form action="shop">
+                    <form action="shop" id="filter-form">
                         @csrf
                     <div class="shop__sidebar__accordion">
                         <div class="accordion" id="accordionExample">
@@ -48,32 +48,13 @@
                                         <div class="shop__sidebar__categories" >
                                             <ul class="nice-scroll">
                                                 @foreach($categories as $category)
-                                                <li><a href="/shop/category/{{ $category->name }}">
-                                                        @switch($category->name)
-                                                            @case('Men')
-                                                                @if($locale == 'vi')
-                                                                    {{ __('vi.Men') }}
-                                                                @else
-                                                                    {{ __('en.Men') }}
-                                                                @endif
-                                                                @break
-                                                            @case('Women')
-                                                                @if($locale == 'vi')
-                                                                    {{ __('vi.Women') }}
-                                                                @else
-                                                                    {{ __('en.Women') }}
-                                                                @endif
-                                                                @break
-                                                            @case('Accessory')
-                                                                @if($locale == 'vi')
-                                                                    {{ __('vi.Accessory') }}
-                                                                @else
-                                                                    {{ __('en.Accessory') }}
-                                                                @endif
-                                                                @break
-                                                            @default
-                                                                {{ $category->name }}
-                                                        @endswitch</a></li>
+                                                <li>
+                                                    <label for="bc-{{$category->id}}" class="category-label {{ (request('category')[$category->id] ?? '') == 'on' ? 'checked' : '' }}">
+                                                        {{$category->name}}
+                                                        <input type="checkbox" {{ (request('category')[$category->id] ?? '') == 'on' ? 'checked' : ''}}
+                                                        id="bc-{{$category->id}}" name="category[{{$category->id}}]">
+                                                    </label>
+                                                 </li>
                                                 @endforeach
                                             </ul>
                                         </div>

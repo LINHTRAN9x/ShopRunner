@@ -117,7 +117,7 @@
                         <button data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-lg btn-block" type="submit">Sign In</button>
                   </div>
 
-                  <a class="small text-muted" href="#!">Forgot password?</a>
+                  <a class="small text-muted" href="{{url('account/forgot-password')}}">Forgot password?</a>
                   <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="./account/register"
                       style="color: #007bff;">Register here</a></p>
                   <a href="#!" class="small text-muted">Terms of use.</a>
@@ -134,7 +134,25 @@
     </div>
   </div>
 </section>
+   @if(session('success'))
+       <div id="alertMessage" class="alert alert-success">
+           <div class="bs4ToastWrapper d-flex toast alert alert-success col-4 ml-2 mt-4 fade show" role="alert">
+               <div>
+                   <div class="toast-header">
+                       <strong class="mr-auto">Notification<i class="fa fa-bell"></i></strong>
+                   </div>
+                   <div class="toast-body d-flex">
 
+                       <p class="text-success"> {{ session('message') }}</p>
+                   </div>
+               </div>
+               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+               </button>
+           </div>
+       </div>
+
+   @endif
 
 <!-- jQuery -->
 <script src="../../plugins/jquery/jquery.min.js"></script>

@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
 
 
         'CheckUserLogin'=>CheckUserLogin::class,
+        'level' => \App\Http\Middleware\CheckUserLevel::class,
     ];
 
 }

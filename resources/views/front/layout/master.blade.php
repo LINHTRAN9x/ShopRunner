@@ -138,12 +138,55 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
-                    <div class="header__top__right align-items-center">
+                    <div class="header__top__right">
 {{--                        <label class="switch">--}}
 {{--                            <input type="checkbox">--}}
 {{--                            <span class="slider"></span>--}}
 
 {{--                        </label>--}}
+
+                        <div class="notifications">
+                            <p class="notifications-bell"><i class='fa fa-bell' style='color:#fff'></i></p>
+                            <div class="notifications-menu">
+                                <h4 class="font-weight-bold float-left mb-3">Notifications</h4>
+                                <div class="notifications-items ">
+                                    <div class="item border font-weight-bold">
+                                        <img src="https://nupet.vn/wp-content/uploads/2023/11/anh-meo-hai-huoc-nupet-3.jpg" alt="" width="50px">
+                                        <div class="u9">
+                                            <p class="font-weight-bold text-uppercase">Order completed</p>
+                                            <p class="text-black-50">Order #192 has been completed!</p>
+                                            <span class="text-black-50">10/4/2024 :: 12:25</span>
+                                        </div>
+                                    </div>
+                                    <div class="item border font-weight-bold text-black-50">
+                                        <img src="https://nupet.vn/wp-content/uploads/2023/11/anh-meo-hai-huoc-nupet-3.jpg" alt="" width="50px">
+                                        <div class="u9">
+                                            <p class="font-weight-bold text-uppercase">You have an order on the way</p>
+                                            <p class="text-black-50">Shipper said: order #231 is still in transit</p>
+                                            <span class="text-black-50">10/4/2024 :: 12:25</span>
+                                        </div>
+                                    </div>
+                                    <div class="item border font-weight-bold text-black-50">
+                                        <img src="https://nupet.vn/wp-content/uploads/2023/11/anh-meo-hai-huoc-nupet-3.jpg" alt="" width="50px">
+                                        <div class="u9">
+                                            <p class="font-weight-bold text-uppercase">Order completed</p>
+                                            <p class="text-black-50">Order #192 has been completed!dwawd dwadwa dwadw wdwadwdwadwd dwada dawd dwad</p>
+                                            <span class="text-black-50">10/4/2024 :: 12:25</span>
+                                        </div>
+                                    </div>
+                                    <div class="item border font-weight-bold text-black-50">
+                                        <img src="https://nupet.vn/wp-content/uploads/2023/11/anh-meo-hai-huoc-nupet-3.jpg" alt="" width="50px">
+                                        <div class="u9">
+                                            <p class="font-weight-bold text-uppercase">Order completed</p>
+                                            <p class="text-black-50">Order #192 has been completed!</p>
+                                            <span class="text-black-50">10/4/2024 :: 12:25</span>
+                                        </div>
+                                    </div>
+                                    <a class="text-center" href="#">View all</a>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="header__top__links">
 
                             <a href="#">FAQs</a>
@@ -490,6 +533,7 @@
 <script src="front/js/gsap.min.js"></script>
 <script src="front/js/ScrollTrigger.min.js"></script>
 <script src="js/bs4-toast.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAIwTPctnSM2PWcbK6cMdlZaSgEYIKp5U&callback=initMap" async defer></script>
 </body>
 

@@ -164,7 +164,8 @@
                             <ul class="checkout__total__all">
                                 <li>Subtotal <span>${{$subTotal}}</span></li>
                                 <li>Shipping <span class="shipping-cost">$0</span></li>
-                                <li>Coupon <span>
+                                <li>Coupon
+                                    <span>
                                         @if(\Illuminate\Support\Facades\Session::get('coupon'))
                                             @foreach(\Illuminate\Support\Facades\Session::get('coupon') as $key => $cou)
                                                 @if($cou['coupon_condition'] == 1)
@@ -180,7 +181,8 @@
                                         @else
                                             0
                                         @endif
-                                    </span></li>
+                                    </span>
+                                </li>
                                 <li>Total <span class="shipping-cost-total">
                                         @if(\Illuminate\Support\Facades\Session::get('coupon'))
                                             ${{$total - $total_coupon}}

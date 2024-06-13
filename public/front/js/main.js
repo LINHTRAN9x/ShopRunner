@@ -991,7 +991,7 @@ $(document).ready(function () {
                 response.images.forEach(function (image, index) {
                     html += '<div class="tab-pane ' + (index === 1 ? 'active' : '') + '" id="tabs-' + (index + 1) + '" role="tabpanel">' +
                         '<div class="product__details__pic__item">' +
-                        '<img src="front/img/product/' + image.path + '" alt="" width="120">' +
+                        '<img style="object-fit: cover" src="front/img/product/' + image.path + '" alt="" width="200" height="150">' +
                         '</div>' +
                         '</div>';
                 });
@@ -1161,9 +1161,38 @@ $(document).ready(function () {
 
 //************ CART VIEW SESSION END ************//
 
+//************ NOTIFICATION SESSION START ************//
+
+$('.notifications-bell').click(function() {
+    $('.notifications-menu').toggleClass('active');
+});
+
+$(document).click(function(event) {
+    if (!$(event.target).closest('.notifications').length) {
+        $('.notifications-menu').removeClass('active');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.category-label').forEach(function (label) {
+        label.addEventListener('click', function () {
+            var checkbox = label.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+
+            // Toggle checked class
+            if (checkbox.checked) {
+                label.classList.add('checked');
+            } else {
+                label.classList.remove('checked');
+            }
+
+            document.getElementById('filter-form').submit();
+        });
+    });
+});
 
 
-
+//************ NOTIFICATION SESSION END ************//
 
 
 

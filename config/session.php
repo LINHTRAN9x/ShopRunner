@@ -196,7 +196,7 @@ return [
     |
     */
 
-    'same_site' => 'lax',
+    'same_site' => 'lax', // Đặt thành null để vô hiệu hóa thuộc tính SameSite
 
     /*
     |--------------------------------------------------------------------------

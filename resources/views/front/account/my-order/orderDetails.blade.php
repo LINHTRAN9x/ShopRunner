@@ -80,6 +80,10 @@
                         <div class="col"></div>
                         <form action="{{ route('reorder', ['id' => $orders->id]) }}" method="POST" class="row align-self-end">
                             @csrf
+                            @if($orders->status == 1)
+                                <a href="{{ route('order.cancel', $orders->id) }}" class="btn btn-outline-danger"
+                                   onclick="return confirm('Are you sure you want to CANCEL this order?')">CANCEL</a>
+                            @endif
                             <a href="{{ route('download.bill', ['orderId' => $orders->id]) }}">
                             <div class="button-dowbill" data-tooltip="Size: ~20Kb">
                                 <div class="button-wrapper-dowbill">
@@ -107,7 +111,7 @@
                             </div>
                             @foreach($orders->orderDetails as $item)
                             <div class="row border-bottom py-2 align-items-center">
-                                <a href="shop/product/{{$item->product->id}}" class="col-3 text-dark font-weight-bold">{{$item->product->name}}</a>
+                                <a href="shop/product/{{$item->product->id}}" class="col-3 text-dark font-weight-bold " data-toggle="tooltip" data-placement="left" title="View Details">{{$item->product->name}}</a>
                                 <p class="col-1 text-right font-weight-bold">${{$item->product->discount ?? $item->product->price}}</p>
                                 <p class="col-2 text-right font-weight-bold">{{$item->qty}}</p>
                                 <p class="col-2 text-right font-weight-bold">{{$item->size}}</p>

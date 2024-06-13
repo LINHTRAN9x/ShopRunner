@@ -1,5 +1,169 @@
 /*Mod linh tinh ////////////////////////////////////////////*/
 
+.category-label {
+    color: #ccc; /* Màu nhạt cho tất cả các danh mục */
+    cursor: pointer;
+}
+
+.category-label.checked {
+    color: #000; /* Màu sáng hơn cho danh mục được chọn */
+    font-weight: bold;
+}
+
+.category-label input[type="checkbox"] {
+    display: none; /* Ẩn checkbox */
+}
+
+.notifications{
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.notifications .notifications-menu{
+    display: none;
+    position: absolute;
+    border-radius: 5px;
+    top: 31px;
+    left: -100px;
+    padding: 17px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    z-index: 999;
+    background: #fff;
+    transition: all 0.3s ease-in-out;
+
+}
+.notifications .notifications-menu::before{
+    content: '';
+    position: absolute;
+    top: -10px; /* Điều chỉnh vị trí theo ý muốn */
+    left: 116px; /* Điều chỉnh vị trí theo ý muốn */
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #fff;
+
+}
+.notifications .notifications-menu h4{
+    color: rgb(14, 86, 130);
+}
+
+.notifications .notifications-menu.active{
+    display: block;
+    transition: all 0.3s ease-in-out;
+}
+.notifications .notifications-bell{
+    padding: 0 18px;
+    margin: 0;
+    cursor: pointer;
+}
+.notifications-items {
+    display: inline-grid;
+
+}
+.notifications-menu{
+    display: inline-grid;
+}
+.notifications-menu .item{
+    padding: 10px;
+    font-size: .9em;
+    margin-bottom: 4px;
+    display: flex;
+    gap: 4px;
+    background: linear-gradient(45deg, #e6e6ff, transparent);
+}
+.notifications-menu .item img{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+.notifications-menu .item:hover{
+    background: #f6f6f6;
+    cursor: pointer;
+}
+.notifications-menu .item:active{
+    background:  linear-gradient(45deg, #e6e6ff, transparent);
+    cursor: pointer;
+}
+.notifications-menu .item .u9{
+    margin: 0;
+    width: 390px;
+}
+.notifications-menu .item p{
+    margin: 0;
+    line-height: 18px;
+}
+.notifications-menu .item span{
+    font-size: .8em;
+}
+
+/*//////////////////////////////////////////////////////////////////////////////*/
+.swiper-button-next svg, .swiper-button-prev svg {
+     width: 0!important;
+     height: 0!important;
+    object-fit: contain;
+    transform-origin: center center;
+}
+
+/*swiper-container {*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*}*/
+
+/*swiper-slide {*/
+/*    text-align: center;*/
+/*    font-size: 18px;*/
+/*    background: #fff;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*}*/
+
+
+/*swiper-container {*/
+/*    width: 100%;*/
+/*    height: 300px;*/
+/*    margin-left: auto;*/
+/*    margin-right: auto;*/
+/*}*/
+
+/*swiper-slide {*/
+/*    background-size: cover;*/
+/*    background-position: center;*/
+/*}*/
+
+.mySwiper {
+    height: 500px;
+    width: 100%;
+    background: #fff;
+}
+
+.mySwiper2 {
+    height: 23%;
+    box-sizing: border-box;
+    padding: 10px 0 0 0;
+    object-fit: cover;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.mySwiper2 swiper-slide {
+    width: 25%;
+    height: 100%;
+    opacity: 0.4;
+}
+
+.mySwiper2 .swiper-slide-thumb-active {
+    opacity: 1;
+}
+
+swiper-slide img {
+    /*display: sw </swiper-slidek;*/
+    /*width: 100%;*/
+    height: 100%;
+    object-fit: cover;
+}
+
 .modal-content-product-cart div#add-to-cart-btn {
     background: #4C7F78;
     border-radius: 13px;
@@ -1269,12 +1433,12 @@ a.quick-view-product:hover{
 }
 
 .shop-detail-col-6{
-    flex: 0 0 60%;
-    max-width: 60%;
+    flex: 0 0 50%;
+    max-width: 50%;
 }
 .shop-detail-col-5{
-    flex: 0 0 40%;
-    max-width: 40%;
+    flex: 0 0 50%;
+    max-width: 50%;
 }
 
 
@@ -1567,7 +1731,7 @@ div#custom-alert button:hover{
     border-radius: 5px;
     padding-left: 20px;
     padding-top: 10px;
-    margin-bottom: 45px;
+    margin-bottom: 10px;
 }
 
 
@@ -2002,7 +2166,7 @@ button.delete-btn {
     border: none;
     text-transform: uppercase;
     display: inline-block;
-    padding: 14px 30px;
+    padding: 10px 17px;
 }
 
 /* Preloder */
@@ -3489,7 +3653,7 @@ span.favourite-count {
 .product__details__pic {
     text-align: center;
     background: #f3f2ee;
-    padding: 156px 0 60px;
+    padding: 156px 0 10px 0;
     margin-bottom: 100px;
 }
 

@@ -89,17 +89,33 @@ class ShopController extends Controller
         }
 
 
-
-
-
-
-
         // Tính avgRating cho các sản phẩm liên quan
         foreach ($relatedProducts as $relatedProduct) {
             $relatedProduct->avgRating = $relatedProduct->productComments()->avg('rating');
         }
 
+        // Lấy các bình luận của sản phẩm và phân trang
+        $productComments = $product->productComments()->paginate(5);
 
+        if ($user) {
+            $userId = $user->id;
+
+            // Tách bình luận của người dùng hiện tại và các bình luận khác
+            $currentUserComments = $productComments->where('user_id', $userId);
+            $otherUserComments = $productComments->where('user_id', '!=', $userId);
+
+            // Hợp nhất các bình luận, đưa bình luận của người dùng hiện tại lên đầu
+            $sortedComments = $currentUserComments->merge($otherUserComments);
+
+            // Tạo một LengthAwarePaginator mới từ các bình luận đã sắp xếp
+            $productComments = new \Illuminate\Pagination\LengthAwarePaginator(
+                $sortedComments,
+                $productComments->total(),
+                $productComments->perPage(),
+                $productComments->currentPage(),
+                ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()]
+            );
+        }
 
         // Kiểm tra xem người dùng đã có bình luận cho sản phẩm này chưa
         $hasCommented = false;
@@ -139,8 +155,8 @@ class ShopController extends Controller
             // Cập nhật bình luận cũ
             $comment->name = $request->name;
             $comment->email = $request->email;
-            $comment->messages = $request->messages;
-            $comment->rating = $request->rating;
+            $comment->messages = $request->messages ?? $comment->messages;
+            $comment->rating = $request->rating ?? $comment->rating;
             $comment->save();
         } else {
             // Tạo bình luận mới nếu không tìm thấy bình luận cũ

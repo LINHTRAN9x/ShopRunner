@@ -17,70 +17,104 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <swiper-container
+                                style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+                                class="mySwiper"
+                                thumbs-swiper=".mySwiper2"
+                                loop="true"
+                                space-between="10"
+                                zoom="true"
+                            >
+                                @foreach($product->productImages as $item)
+                                    <swiper-slide>
+                                        <div class="swiper-zoom-container">
+                                            <img src="front/img/product/{{$item->path}}" alt=""/>
+                                        </div>
+                                    </swiper-slide>
+                                @endforeach
 
-                                    <div class="product__details__pic__item zoom-gallery">
-                                        <a href="front/img/product/{{$product->productImages[0]->path}}" class="">
-                                            <img src="front/img/product/{{$product->productImages[0]->path}}" alt="" width="670px" height="500px" style="background-size: cover; object-fit: cover;">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                    <div class="product__details__pic__item zoom-gallery">
-                                        <a href="front/img/product/{{$product->productImages[1]->path}}" class="">
-                                            <img src="front/img/product/{{$product->productImages[1]->path}}" alt="" width="670px" height="500px" style="background-size: cover; object-fit: cover;">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="tabs-3" role="tabpanel">
-                                    <div class="product__details__pic__item zoom-gallery">
-                                        <a href="front/img/product/{{$product->productImages[2]->path}}" class="">
-                                            <img src="front/img/product/{{$product->productImages[2]->path}}" alt="" width="670px" height="500px" style="background-size: cover; object-fit: cover;">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="tabs-4" role="tabpanel">
-                                    <div class="product__details__pic__item">
-                                        <img src="front/img/product/{{$product->productImages[3]->path}}" alt="" width="670px" height="500px" style="background-size: cover; object-fit: cover;">
-                                        <a href="front/img/product/{{$product->productImages[3]->path}}" class="video-popup"><i class="fa fa-play"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+
+                            </swiper-container>
+
+                            <swiper-container
+                                class="mySwiper2"
+                                loop="true"
+                                space-between="10"
+                                slides-per-view="4"
+                                free-mode="true"
+                                watch-slides-progress="true"
+                            >
+                                @foreach($product->productImages as $item)
+                                    <swiper-slide>
+                                        <img src="front/img/product/{{$item->path}}" />
+                                    </swiper-slide>
+                                @endforeach
+
+                            </swiper-container>
+{{--                            <div class="tab-content">--}}
+{{--                                <div class="tab-pane active" id="tabs-1" role="tabpanel">--}}
+
+{{--                                    <div class="product__details__pic__item zoom-gallery">--}}
+{{--                                        <a href="front/img/product/{{$product->productImages[0]->path}}" class="">--}}
+{{--                                            <img src="front/img/product/{{$product->productImages[0]->path}}" alt="" width="670px" height="500px" style="background-size: cover; object-fit: cover;">--}}
+{{--                                        </a>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="tab-pane" id="tabs-2" role="tabpanel">--}}
+{{--                                    <div class="product__details__pic__item zoom-gallery">--}}
+{{--                                        <a href="front/img/product/{{$product->productImages[1]->path}}" class="">--}}
+{{--                                            <img src="front/img/product/{{$product->productImages[1]->path}}" alt="" width="670px" height="500px" style="background-size: cover; object-fit: cover;">--}}
+{{--                                        </a>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="tab-pane" id="tabs-3" role="tabpanel">--}}
+{{--                                    <div class="product__details__pic__item zoom-gallery">--}}
+{{--                                        <a href="front/img/product/{{$product->productImages[2]->path}}" class="">--}}
+{{--                                            <img src="front/img/product/{{$product->productImages[2]->path}}" alt="" width="670px" height="500px" style="background-size: cover; object-fit: cover;">--}}
+{{--                                        </a>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="tab-pane" id="tabs-4" role="tabpanel">--}}
+{{--                                    <div class="product__details__pic__item">--}}
+{{--                                        <img src="front/img/product/{{$product->productImages[3]->path}}" alt="" width="670px" height="500px" style="background-size: cover; object-fit: cover;">--}}
+{{--                                        <a href="front/img/product/{{$product->productImages[3]->path}}" class="video-popup"><i class="fa fa-play"></i></a>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                         </div>
 
-                        <div class="col-lg-3 col-md-3 mt-3">
-                            <div class="row">
-                                <ul class="nav flex-nowrap nav-tabs" role="tablist">
-                                    <li class="nav-item pr-2">
-                                        <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                            <div class="product__thumb__pic set-bg" data-setbg="front/img/product/{{$product->productImages[0]->path}}">
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item pr-2">
-                                        <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
-                                            <div class="product__thumb__pic set-bg" data-setbg="front/img/product/{{$product->productImages[1]->path}}">
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item pr-2">
-                                        <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
-                                            <div class="product__thumb__pic set-bg" data-setbg="front/img/product/{{$product->productImages[2]->path}}">
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
-                                            <div class="product__thumb__pic set-bg" data-setbg="front/img/product/{{$product->productImages[3]->path}}">
-                                                <i class="fa fa-play"></i>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+{{--                        <div class="col-lg-3 col-md-3 mt-3">--}}
+{{--                            <div class="row">--}}
+{{--                                <ul class="nav flex-nowrap nav-tabs" role="tablist">--}}
+{{--                                    <li class="nav-item pr-2">--}}
+{{--                                        <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">--}}
+{{--                                            <div class="product__thumb__pic set-bg" data-setbg="front/img/product/{{$product->productImages[0]->path}}">--}}
+{{--                                            </div>--}}
+{{--                                        </a>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="nav-item pr-2">--}}
+{{--                                        <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">--}}
+{{--                                            <div class="product__thumb__pic set-bg" data-setbg="front/img/product/{{$product->productImages[1]->path}}">--}}
+{{--                                            </div>--}}
+{{--                                        </a>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="nav-item pr-2">--}}
+{{--                                        <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">--}}
+{{--                                            <div class="product__thumb__pic set-bg" data-setbg="front/img/product/{{$product->productImages[2]->path}}">--}}
+{{--                                            </div>--}}
+{{--                                        </a>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="nav-item">--}}
+{{--                                        <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">--}}
+{{--                                            <div class="product__thumb__pic set-bg" data-setbg="front/img/product/{{$product->productImages[3]->path}}">--}}
+{{--                                                <i class="fa fa-play"></i>--}}
+{{--                                            </div>--}}
+{{--                                        </a>--}}
+{{--                                    </li>--}}
+{{--                                </ul>--}}
+{{--                            </div>--}}
 
-                        </div>
+{{--                        </div>--}}
                     </div>
                 </div>
             </div>
@@ -252,10 +286,15 @@
                             <div class="product__details__tab__content">
                                 <div class="product__details__tab__content__item">
                                     <div class="customer-review-option">
-                                        <h4>{{count($product->productComments)}} Comments</h4>
+                                        <h5>{{count($product->productComments)}} Comments</h5>
                                         <div class="comment-option">
                                             @foreach($productComments as $productComment)
-                                                <div class="row border-bottom">
+                                                @if($productComment->user_id == Auth::id())
+                                                <div class="row border-bottom" style="background: #f3f2ee">
+                                                    @else
+                                                        <div class="row border-bottom">
+                                                    @endif
+
                                                     <div class="col-md-12">
                                                         <div class="card-comment">
                                                             <ul class="list-unstyled">
@@ -356,6 +395,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             @endforeach
 
                                             <div class="col-lg-12">
@@ -367,14 +407,14 @@
 
                                         <div class="leave-comment">
                                             @if(Auth::user() && $hasPurchased)
-                                            <h4>
+                                            <h5>
                                                 @if($hasCommented)
                                                     Edit comment
                                                 @else
-                                                    What do you think this product
+                                                    What do you think this product ?
                                                 @endif
 
-                                            </h4>
+                                            </h5>
                                             <form action="" method="POST" class="comment-form">
                                                 @csrf
                                                 <div class="personal-rating">
@@ -392,6 +432,9 @@
                                                         <label for="star1" title="text">1 star</label>
                                                     </div>
                                                 </div>
+                                                @error("rating")
+                                                <p class="text-danger">{{$message}}</p>
+                                                @enderror
                                                 <input type="hidden" name="product_id" value="{{$product->id}}">
                                                 <input type="hidden" name="user_id" value="{{\Illuminate\Support\Facades\Auth::user()->id ?? null}}">
                                                 <div class="row">
@@ -403,8 +446,9 @@
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <textarea name="messages" placeholder="Messages"></textarea>
-
-
+                                                        @error("messages")
+                                                        <p class="text-danger">{{$message}}</p>
+                                                        @enderror
                                                         <button type="submit" class="site-btn">
                                                             @if($hasCommented)
                                                                 Update massage
@@ -418,7 +462,7 @@
                                             @elseif(Auth::user() && !$hasPurchased)
                                                 <h6 class="text-black-50">(You must purchase the product to be reviewed!)</h6>
                                             @elseif(!Auth::user())
-                                                <h6 class="text-black-50">(You must login to be comment)</h6>
+                                                <h6 class="text-black-50">(You must <a href="./account/login">login</a> to be comment)</h6>
                                             @endif
                                         </div>
                                     </div>
