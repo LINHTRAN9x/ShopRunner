@@ -6,22 +6,41 @@ class Constant
 {
     //Order
     const ORDER_STATUS_RECEIVEORDERS = 1;
-    const ORDER_STATUS_UNCONFIRMED = 2;
-    const ORDER_STATUS_CONFIRMED = 3;
-    const ORDER_STATUS_PAID = 4;
-    const ORDER_STATUS_PROCESSING = 5;
-    const ORDER_STATUS_SHIPPING = 6;
-    const ORDER_STATUS_FINISH = 7;
-    const ORDER_STATUS_CANCEL = 8;
+
+    const ORDER_STATUS_CONFIRMED = 2;
+
+    const ORDER_STATUS_SHIPPING = 3;
+    const ORDER_STATUS_FINISH = 4;
+    const ORDER_STATUS_CANCEL = 5;
     public static $ORDER_STATUS = [
-       self::ORDER_STATUS_RECEIVEORDERS => 'Receive Orders',
-        self::ORDER_STATUS_UNCONFIRMED => 'Unconfirmed',
+        self::ORDER_STATUS_RECEIVEORDERS => 'Orders received',
+
         self::ORDER_STATUS_CONFIRMED => 'Confirmed',
-        self::ORDER_STATUS_PAID => 'Paid',
-        self::ORDER_STATUS_PROCESSING => 'Processing',
+
         self::ORDER_STATUS_SHIPPING => 'Shipping',
-        self::ORDER_STATUS_FINISH => 'Finish',
-        self::ORDER_STATUS_CANCEL => 'Cancel',
+        self::ORDER_STATUS_FINISH => 'Finished',
+        self::ORDER_STATUS_CANCEL => 'Canceled',
+    ];
+
+
+    const STATUSCOLORS = [
+        self::ORDER_STATUS_RECEIVEORDERS => '#000',// Grey
+//        self::ORDER_STATUS_UNCONFIRMED => '#000',// black
+        self::ORDER_STATUS_CONFIRMED => '#007bff',// Blue
+//        self::ORDER_STATUS_PAID => '#ffc107',// Yellow
+//        self::ORDER_STATUS_PROCESSING => '#6f42c1',// Purple
+        self::ORDER_STATUS_SHIPPING => '#28a745',// Green
+        self::ORDER_STATUS_FINISH => '#fd7e14',// Orange
+        self::ORDER_STATUS_CANCEL => '#dc3545',// Red
+    ];
+
+
+    const PAYMENT_STATUS_UNPAID = 1;
+    const PAYMENT_STATUS_PAID = 2;
+
+    public static $PAYMENT_STATUS = [
+        self::PAYMENT_STATUS_UNPAID => 'UnPaid',
+        self::PAYMENT_STATUS_PAID => 'Paid',
     ];
 
     //user
@@ -29,21 +48,14 @@ class Constant
     const user_level_admin = 1;
     const user_level_client = 2;
     public static $user_level = [
-        self::user_level_superAdmin => 'superAdmin',
-        self::user_level_admin => 'admin',
-        self::user_level_client => 'client',
+        self::user_level_superAdmin => 'Super Admin',
+        self::user_level_admin => 'Admin',
+        self::user_level_client => 'Client',
     ];
-
-
-    const STATUSCOLORS = [
-        self::ORDER_STATUS_RECEIVEORDERS => '#6c757d',// Grey
-        self::ORDER_STATUS_UNCONFIRMED => '#000',// black
-        self::ORDER_STATUS_CONFIRMED => '#007bff',// Blue
-        self::ORDER_STATUS_PAID => '#ffc107',// Yellow
-        self::ORDER_STATUS_PROCESSING => '#6f42c1',// Purple
-        self::ORDER_STATUS_SHIPPING => '#28a745',// Green
-        self::ORDER_STATUS_FINISH => '#fd7e14',// Orange
-        self::ORDER_STATUS_CANCEL => '#dc3545',// Red
+    public static $user_level_color = [
+        self::user_level_superAdmin => '#dc3545',
+        self::user_level_admin => '#00ad00',
+        self::user_level_client  => '#6c757d',
     ];
     const COLOR_GREY = 1;
     const COLOR_WHITE = 2;
@@ -76,6 +88,7 @@ class Constant
     const SIZE_XXL = 7;
     const SIZE_3XL = 8;
     const SIZE_4XL = 9;
+    const FREE_SIZE = 10;
 
     public static $SIZES = [
         self::SIZE_XS => 'XS',
@@ -87,6 +100,7 @@ class Constant
         self::SIZE_XXL => 'XXL',
         self::SIZE_3XL => '3XL',
         self::SIZE_4XL => '4XL',
+        self::FREE_SIZE => 'FREE',
     ];
 
     const BEST_SELLER = 0;
@@ -99,6 +113,8 @@ class Constant
         self::HOT_SALES => 'Hot Sales',
     ];
 
+
+//////$TAGS
     const CLOTHING = 0;
     const ACCESSORIES = 1;
     const HANDBAG = 2;
@@ -117,5 +133,58 @@ class Constant
         self::SHIRT => 'Shirt',
         self::HAT => 'Hat',
         self::CALF => 'Calf',
+    ];
+//////$COUPON_CONDITION
+    const BY_PERCENT = 1;
+    const BY_AMOUNT = 2;
+    public static $COUPON_CONDITION = [
+        self::BY_PERCENT => 'Phần trăm',
+        self::BY_AMOUNT => 'Số tiền',
+    ];
+
+//////$REVIEW_STATUS
+    const PENDING = 0;
+    const ALLOWED = 1;
+    const REFUSED = 2;
+    public static $REVIEW_STATUS= [
+        self::PENDING => 'PENDING',
+        self::ALLOWED => 'ALLOWED',
+        self::REFUSED => 'REFUSED',
+    ];
+
+    public static $REVIEW_STATUS_COLOR = [
+        self::PENDING => '#6c757d',
+        self::ALLOWED => '#00ad00',
+        self::REFUSED => '#dc3545',
+    ];
+    //////PERMISSIONS GROUPS
+    const ADMIN = 0;
+    const AUTHENTICATE = 1;
+    const BRAND = 2;
+    const CATEGORY = 3;
+    const CONTROLLER = 4;
+    const COUPON = 5;
+    const LANGUAGE = 6;
+    const ORDER = 7;
+    const PERMISSION = 8;
+    const PRODUCT_COMMENT = 9;
+    const PRODUCT = 10;
+    const REVIEW = 11;
+    const USER = 12;
+
+    public static $PERMISSION_CONTROLLERS = [
+        self::ADMIN => 'AdminController',
+        self::AUTHENTICATE => 'AuthenticateController',
+        self::BRAND => 'BrandController',
+        self::CATEGORY => 'CategoryController',
+        self::CONTROLLER => 'Controller',
+        self::COUPON => 'CouponController',
+        self::LANGUAGE => 'LanguageController',
+        self::ORDER => 'OrderController',
+        self::PERMISSION => 'PermissionController',
+        self::PRODUCT_COMMENT => 'ProductCommentController',
+        self::PRODUCT => 'ProductController',
+        self::REVIEW => 'ReviewController',
+        self::USER => 'UserController',
     ];
 }

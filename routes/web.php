@@ -2,24 +2,30 @@
 
 
 //client
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\Front\AccountController;
-use App\Http\Controllers\LanguageController;
-use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\Front\ShopController;
-use \App\Http\Controllers\Front\CartController;
-use \App\Http\Controllers\Front\CheckoutController;
-use \App\Http\Controllers\Front\HomeController;
-use \App\Http\Controllers\Front\FavouriteController;
-use \App\Http\Controllers\BotManController;
 
-//admin
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CouponController;
+//use App\Http\Controllers\Admin\old\UserController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\ProductCommentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\BotManController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\AccountController;
+use App\Http\Controllers\Front\CartController;
+use App\Http\Controllers\Front\CheckoutController;
+use App\Http\Controllers\Front\FavouriteController;
+use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\ShopController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
+
+//admin
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -125,66 +131,77 @@ Route::post('/orders/reorder/{id}', [AccountController::class, 'reOrder'])->name
 Route::middleware(['auth', 'level'])->prefix('admin')->group(function () {
     Route::get('', [AdminController::class, 'index'])
         ->name('admin');
-    Route::get('search', [AdminController::class, 'search'])
-        ->name('admin.search');
+    Route::get('/getOrdersForChart', [AdminController::class, 'getOrdersForChart'])
+        ->name('getOrdersForChart');
+    Route::get('/getTodayOrderStatusData', [AdminController::class, 'getTodayOrderStatusData'])
+        ->name('getTodayOrderStatusData');
+    Route::get('/getLatestOrders', [AdminController::class, 'getLatestOrders'])
+        ->name('getLatestOrders');
+    Route::get('/getBestSellingProducts', [AdminController::class, 'getBestSellingProducts'])
+        ->name('getBestSellingProducts');
+
+
+
     Route::prefix('categories')->group(function () {
         Route::get('/search', [CategoryController::class, 'search'])
             ->name('categories.search');
-        Route::get('/delete{id}', [CategoryController::class, 'delete'])
+        Route::post('/restore/{id}', [CategoryController::class, 'restore'])
+            ->name('categories.restore');
+        Route::post('/delete/{id}', [CategoryController::class, 'delete'])
             ->name('categories.delete');
-        Route::put('/update{id}', [CategoryController::class, 'update'])
+        Route::post('/update/{category}', [CategoryController::class, 'update'])
             ->name('categories.update');
-        Route::get('/edit{id}', [CategoryController::class, 'edit'])
+        Route::get('/edit/{category}', [CategoryController::class, 'edit'])
             ->name('categories.edit');
         Route::post('/store', [CategoryController::class, 'store'])
             ->name('categories.store');
         Route::get('/create', [CategoryController::class, 'create'])
             ->name('categories.create');
-        Route::put('/restore', [CategoryController::class, 'restore'])
-            ->name('categories.restore');
+
         Route::get('/', [CategoryController::class, 'index'])
             ->name('categories');
     });
     Route::prefix('brands')->group(function () {
-        Route::get('/search', [BrandController::class, 'search'])
-            ->name('brands.search');
-        Route::put('/restore', [BrandController::class, 'restore'])
+        Route::post('/restore/{id}', [BrandController::class, 'restore'])
             ->name('brands.restore');
-        Route::get('/delete{id}', [BrandController::class, 'delete'])
+        Route::post('/delete/{id}', [BrandController::class, 'delete'])
             ->name('brands.delete');
-        Route::put('/update{id}', [BrandController::class, 'update'])
+        Route::post('/update/{brand}', [BrandController::class, 'update'])
             ->name('brands.update');
-        Route::get('/edit{id}', [BrandController::class, 'edit'])
+        Route::get('/edit/{brand}', [BrandController::class, 'edit'])
             ->name('brands.edit');
         Route::post('/store', [BrandController::class, 'store'])
             ->name('brands.store');
-        Route::get('/create', [BrandController::class, 'create'])
-            ->name('brands.create');
         Route::get('/', [BrandController::class, 'index'])
             ->name('brands');
     });
 
 
     Route::prefix('products')->group(function () {
-        Route::get('/search', [ProductController::class, 'search'])
-            ->name('products.search');
-
-
-//        Route::get('/fetch-quantity', [ProductController::class, 'fetchQuantity'])
-//            ->name('products.fetch-quantity');
-
-
         Route::post('/emptyTempFolder', [ProductController::class, 'emptyTempFolder'])
             ->name('products.emptyTempFolder');
         Route::post('/update/{id}', [ProductController::class, 'update'])
             ->name('products.update');
         Route::get('/edit{id}', [ProductController::class, 'edit'])
             ->name('products.edit');
-        Route::get('/productDetails/{product}', [ProductController::class, 'productsDetails'])
+///////
+        Route::get('/deleteItem/{productDetail}', [ProductController::class, 'deleteItem'])// consider using post for secure
+        ->name('products.deleteItem');
+
+        Route::post('/updateItem/{productDetail}', [ProductController::class, 'updateItem'])
+            ->name('products.updateItem');
+        Route::get('/editItem/{productDetail}', [ProductController::class, 'editItem'])
+            ->name('products.editItem');
+
+        Route::post('/storeItem/{product}', [ProductController::class, 'storeItem'])
+            ->name('products.storeItem');
+//////
+        Route::get('/productDetails/{product}', [ProductController::class, 'productDetails'])
             ->name('products.productDetails');
-        Route::put('/restore', [ProductController::class, 'restore'])
+
+        Route::post('/restore/{id}', [ProductController::class, 'restore'])
             ->name('products.restore');
-        Route::get('/delete{id}', [ProductController::class, 'delete'])
+        Route::post('/delete/{id}', [ProductController::class, 'delete'])
             ->name('products.delete');
         Route::post('/store', [ProductController::class, 'store'])
             ->name('products.store');
@@ -251,21 +268,80 @@ Route::middleware(['auth', 'level'])->prefix('admin')->group(function () {
 
     });
 
-    Route::prefix('reviews')->group(function () {
-        Route::get('/search', [ReviewController::class, 'search'])
-            ->name('reviews.search');// route name luôn phải ở dạng reviews.abcxyz để search box hướng url về phần trước dầu. tức reviews và chấm thêm search
-        Route::put('/restore', [ReviewController::class, 'restore'])
-            ->name('reviews.restore');
-        Route::get('/delete{id}', [ReviewController::class, 'delete'])
-            ->name('reviews.delete');
-        Route::post('/submitReviewResponse', [ReviewController::class, 'submitReviewResponse'])
-            ->name('reviews.submitReviewResponse');
-        Route::get('/getSubmitReviewResponse', [ReviewController::class, 'getSubmitReviewResponse'])
-            ->name('reviews.getSubmitReviewResponse');
-        Route::put('/updateReviewStatus', [ReviewController::class, 'updateReviewStatus'])
-            ->name('reviews.updateReviewStatus');
-        Route::get('/', [ReviewController::class, 'index'])
-            ->name('reviews');
+    Route::prefix('productComments')->group(function () {
+        Route::post('/restore/{id}', [ProductCommentController::class, 'restore'])
+            ->name('productComments.restore');
+        Route::post('/delete/{id}', [ProductCommentController::class, 'delete'])
+            ->name('productComments.delete');
+        Route::post('/updateProductCommentStatus/{productComment}', [ProductCommentController::class, 'updateProductCommentStatus'])
+            ->name('productComments.updateProductCommentStatus');
+        Route::post('/submitShopResponse/{productComment}', [ProductCommentController::class, 'submitShopResponse'])
+            ->name('productComments.submitShopResponse');
+        Route::get('/getShopResponse/{productComment}', [ProductCommentController::class, 'getShopResponse'])
+            ->name('productComments.getShopResponse');
+        Route::get('/', [ProductCommentController::class, 'index'])
+            ->name('productComments');
+    });
+
+    Route::prefix('coupons')->group(function () {
+        Route::post('/restore/{id}', [CouponController::class, 'restore'])
+            ->name('coupons.restore');
+        Route::post('/delete/{id}', [CouponController::class, 'delete'])
+            ->name('coupons.delete');
+        Route::post('/update/{coupon}', [CouponController::class, 'update'])
+            ->name('coupons.update');
+        Route::get('/edit/{coupon}', [CouponController::class, 'edit'])
+            ->name('coupons.edit');
+        Route::post('/store', [CouponController::class, 'store'])
+            ->name('coupons.store');
+        Route::get('/', [CouponController::class, 'index'])
+            ->name('coupons');
+    });
+////phân quyền authorization
+    Route::prefix('users')->group(function () {
+        Route::post('/restore/{id}', [UserController::class, 'restore'])
+            ->name('users.restore');
+        Route::post('/delete/{id}', [UserController::class, 'delete'])
+            ->name('users.delete');
+        Route::post('/updateProductCommentStatus/{productComment}', [UserController::class, 'updateProductCommentStatus'])
+            ->name('users.updateProductCommentStatus');
+        Route::post('/submitShopResponse/{productComment}', [UserController::class, 'submitShopResponse'])
+            ->name('users.submitShopResponse');
+        Route::get('/getShopResponse/{productComment}', [UserController::class, 'getShopResponse'])
+            ->name('users.getShopResponse');
+
+        Route::get('/', [UserController::class, 'index'])
+            ->name('users');
+    });
+
+    Route::prefix('permissions')->group(function () {
+        Route::post('/restore/{id}', [PermissionController::class, 'restore'])
+            ->name('permissions.restore');
+        Route::post('/delete/{id}', [PermissionController::class, 'delete'])
+            ->name('permissions.delete');
+        Route::post('/update/{permission}', [PermissionController::class, 'update'])
+            ->name('permissions.update');
+        Route::get('/edit/{permission}', [PermissionController::class, 'edit'])
+            ->name('permissions.edit');
+        Route::post('/store', [PermissionController::class, 'store'])
+            ->name('permissions.store');
+        Route::get('/', [PermissionController::class, 'index'])
+            ->name('permissions');
+    });
+
+    Route::prefix('roles')->group(function () {
+        Route::post('/restore/{id}', [RoleController::class, 'restore'])
+            ->name('roles.restore');
+        Route::post('/delete/{id}', [RoleController::class, 'delete'])
+            ->name('roles.delete');
+        Route::post('/update/{role}', [RoleController::class, 'update'])
+            ->name('roles.update');
+        Route::get('/edit/{role}', [RoleController::class, 'edit'])
+            ->name('roles.edit');
+        Route::post('/store', [RoleController::class, 'store'])
+            ->name('roles.store');
+        Route::get('/', [RoleController::class, 'index'])
+            ->name('roles');
     });
 });
 

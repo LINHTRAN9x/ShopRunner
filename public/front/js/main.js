@@ -596,7 +596,7 @@ $('.shipping_method').change(function () {
 
             // Tính toán tổng số tiền sau khi áp dụng giảm giá và chi phí vận chuyển
             var totalCost = response.subtotal;
-
+            console.log(totalCost);
 
             $('.shipping-cost').text('$' + shippingCost);
             console.log(response);

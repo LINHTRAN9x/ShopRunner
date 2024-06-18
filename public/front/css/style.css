@@ -1685,8 +1685,8 @@ div#custom-alert button:hover{
 }
 
 .customer-review-option .personal-rating {
-    margin-bottom: 50px;
-    padding-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .customer-review-option .personal-rating h6 {
@@ -3939,6 +3939,7 @@ span.favourite-count {
     height: 40px;
     border: 1px solid #e5e5e5;
     position: relative;
+
 }
 
 .product__details__cart__option .quantity .pro-qty input {
@@ -3964,6 +3965,7 @@ span.favourite-count {
     font-size: 18px;
     color: #0d0d0d;
     position: absolute;
+    z-index: 10005;
     right: 15px;
     top: 3px;
     height: 10px;

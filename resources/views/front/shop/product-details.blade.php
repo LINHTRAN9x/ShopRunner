@@ -418,7 +418,7 @@
                                             <form action="" method="POST" class="comment-form">
                                                 @csrf
                                                 <div class="personal-rating">
-                                                    <h6>Rating</h6>
+                                                    <h6>Rating:</h6>
                                                     <div class="rate">
                                                         <input type="radio" id="star5" name="rating" value="5" />
                                                         <label for="star5" title="text">5 stars</label>

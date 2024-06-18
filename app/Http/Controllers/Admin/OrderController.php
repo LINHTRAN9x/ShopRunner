@@ -11,26 +11,54 @@ use mysql_xdevapi\Exception;
 
 class OrderController extends Controller
 {
+    public function changeStatus(Request $request) {
+        try {
+            $order = Order::find($request->order_id);
+            $order->status = $request->status;
+            $order->save();
+
+            $orderStatus = $order->status;
+
+            // Prepare status text and color
+//            $statusText = Constant::$ORDER_STATUS[$orderStatus];
+//            $statusColor = Constant::STATUSCOLORS[$orderStatus];
+
+            // Render the updated buttons
+            $buttonsHtml = view('admin.partials.orderButtons', compact('order'))->render();
+
+            return response()->json([
+                'success' => true,
+//                'statusText' => $statusText,
+//                'statusColor' => $statusColor,
+                'buttonsHtml' => $buttonsHtml
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json(['success' => false]);
+        }
+    }
     public function index(Request $request) {
         try {
             $sortBy = $request->get('sort_by', 'created_at'); // Default column to sort by
             $sortDirection = $request->get('sort_direction', 'desc'); // Default sort direction
             $showDeleted = $request->get('show_deleted', 'no'); // Default to not showing deleted
             $searchTerm = $request->get('search_term', '');
-
             $order_status = $request->get('order_status', null);
-            $payment_status = $request->get('payment_status', null);
-
+            $minPrice = $request->get('min_price', null);
+            $maxPrice = $request->get('max_price', null);
 
             // Validate sort direction
             if (!in_array($sortDirection, ['asc', 'desc'])) {
                 $sortDirection = 'desc';
             }
+
             $query = Order::query();
+
             // Fetch orders with or without trashed ones
             if ($showDeleted === 'yes') {
                 $query = $query->withTrashed();
             }
+
+            // Apply search term filter
             if ($searchTerm) {
                 $query->where(function ($query) use ($searchTerm) {
                     $query->where('id', 'like', "%$searchTerm%")
@@ -53,46 +81,48 @@ class OrderController extends Controller
                     ->orWhereHas('orderDetails', function ($query) use ($searchTerm) {
                         $query->where(function ($query) use ($searchTerm) {
                             $query->where('product_id', 'like', "%$searchTerm%")
-                                ->orWhere('qty', 'like', "%$searchTerm%") // Added column
-                                ->orWhere('total', 'like', "%$searchTerm%") // Added column
-                                ->orWhere('size', 'like', "%$searchTerm%") // Added column
-                                ->orWhere('color', 'like', "%$searchTerm%") // Added column
-                                ->orWhere('coupon', 'like', "%$searchTerm%"); // Added column
+                                ->orWhere('qty', 'like', "%$searchTerm%")
+                                ->orWhere('total', 'like', "%$searchTerm%")
+                                ->orWhere('size', 'like', "%$searchTerm%")
+                                ->orWhere('color', 'like', "%$searchTerm%")
+                                ->orWhere('coupon', 'like', "%$searchTerm%");
                         });
                     })
-//                ->orWhereHas('voucher', function ($query) use ($searchTerm) {
-//                $query->where(function ($query) use ($searchTerm) {
-//                    $query->where('code', 'like', "%$searchTerm%");
-////                        ->orWhere('email', 'like', "%$searchTerm%") // Added column
-////                        ->orWhere('phone_number', 'like', "%$searchTerm%"); // Added column
-//                });
-//            })
                     ->orWhereHas('user', function ($query) use ($searchTerm) {
                         $query->where(function ($query) use ($searchTerm) {
                             $query->where('name', 'like', "%$searchTerm%");
-//                        ->orWhere('id', 'like', "%$searchTerm%") // Added column
-//                        ->orWhere('phone_number', 'like', "%$searchTerm%"); // Added column
                         });
                     });
             }
 
+            // Apply order status filter
             if ($order_status !== null) {
-                $query = $query->where('status', $order_status);
+                $query = $query->where('status','=', $order_status);
             }
 
-//        if ($payment_status !== null) {
-//            $query = $query->where('payment_status', $payment_status);
-//        }
+            // Apply price range filter
+            if ($minPrice !== null) {
+                $query->whereHas('orderDetails', function ($query) use ($minPrice) {
+                    $query->where('total', '>=', $minPrice);
+                });
+            }
+
+            if ($maxPrice !== null) {
+                $query->whereHas('orderDetails', function ($query) use ($maxPrice) {
+                    $query->where('total', '<=', $maxPrice);
+                });
+            }
 
             $query->orderBy($sortBy, $sortDirection);
 
-            $orders = $query->paginate(4);
+            $orders = $query->paginate(5);
 
-            return view('admin.order.index', compact('orders', 'sortBy', 'sortDirection', 'showDeleted', 'order_status', 'payment_status', 'searchTerm'));
-        }catch(\Exception $exception) {
-            return redirect()->route('home')->with('error', 'Something went wrong!');
+            return view('admin.order.index', compact('orders', 'sortBy', 'sortDirection', 'showDeleted', 'order_status', 'searchTerm', 'minPrice', 'maxPrice'));
+        } catch (\Exception $exception) {
+            return back()->with('error', 'Something went wrong!');
         }
     }
+
 
     public function delete(Request $request, $order_id)
     {

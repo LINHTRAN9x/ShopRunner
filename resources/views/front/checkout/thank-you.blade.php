@@ -510,7 +510,15 @@
                            <div class="">
                                <p class="font-weight-bold text-black-50">${{$subTotal}}</p>
                                <p class="font-weight-bold text-black-50">${{$shipping}}</p>
-                               <p class="font-weight-bold text-black-50">{{$discount}}</p>
+                               <p class="font-weight-bold text-black-50">
+                                   @if( $discount_condition == 2)
+                                       -{{$discount}}$
+                                   @elseif( $discount_condition == 1)
+                                       -{{$discount}}%
+                                   @else
+                                       0
+                                   @endif
+                               </p>
                                <p class="font-weight-bold h5">${{$total}}</p>
                            </div>
                    </div>

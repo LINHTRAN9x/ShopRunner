@@ -176,6 +176,14 @@
                                                     @php
                                                     $total_coupon = ($total*$cou['coupon_number']) / 100;
                                                      @endphp
+                                                @elseif($cou['coupon_condition'] == 2)
+                                                    <div>
+                                                        -{{$cou['coupon_number']}}$
+                                                        <a href="{{url('checkout/delete_coupon')}}" class="icon_close text-dark border font-weight-bold" title="Delete"></a>
+                                                    </div>
+                                                    @php
+                                                        $total_coupon = $cou['coupon_number'];
+                                                    @endphp
                                                 @endif
                                             @endforeach
                                         @else

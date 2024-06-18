@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $table = 'products';
     protected $primaryKey = 'id';
@@ -43,4 +44,10 @@ class Product extends Model
     {
         return $this->productComments()->avg('rating');
     }
+    public function getTotalSoldQuantityAttribute()
+    {
+        // Calculate total sold quantity using relationship
+        return $this->details()->sum('qty');
+    }
+
 }

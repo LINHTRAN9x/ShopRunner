@@ -366,38 +366,38 @@
        @foreach($carts as $cart)
 
                 <div class="u-row-container" style="padding: 0px;background-color: transparent">
-                    <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
+                    <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;border-bottom: 1px solid #e7e7e7;word-wrap: break-word;word-break: break-word;background-color: transparent;">
                         <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
                             <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:500px;"><tr style="background-color: transparent;"><![endif]-->
 
                             <!--[if (mso)|(IE)]><td align="center" width="115" style="width: 115px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-                            <div class="u-col u-col-23p14" style="max-width: 320px;min-width: 115.7px;display: table-cell;vertical-align: top;">
-                                <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-                                    <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
+{{--                            <div class="u-col u-col-23p14" style="max-width: 320px;min-width: 115.7px;display: table-cell;vertical-align: top;">--}}
+{{--                                <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">--}}
+{{--                                    <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->--}}
 
-                                        <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                                            <tbody>
-                                            <tr>
-                                                <td style="overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:arial,helvetica,sans-serif;" align="left">
+{{--                                        <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">--}}
+{{--                                            <tbody>--}}
+{{--                                            <tr>--}}
+{{--                                                <td style="overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:arial,helvetica,sans-serif;" align="left">--}}
 
-                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                                        <tr>
-                                                            <td style="padding-right: 0px;padding-left: 0px;" align="center">
+{{--                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">--}}
+{{--                                                        <tr>--}}
+{{--                                                            <td style="padding-right: 0px;padding-left: 0px;" align="center">--}}
 
-                                                                <img align="center" border="0" src="front/img/product/{{$cart->options->images[0]->path}}" alt="Hand Bag" title="Hand Bag" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 85%;max-width: 98.34px;" width="98.34"/>
+{{--                                                                <img align="center" border="0" src="front/img/product/{{$cart->options->images[0]->path}}" alt="Hand Bag" title="Hand Bag" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 85%;max-width: 98.34px;" width="98.34"/>--}}
 
-                                                            </td>
-                                                        </tr>
-                                                    </table>
+{{--                                                            </td>--}}
+{{--                                                        </tr>--}}
+{{--                                                    </table>--}}
 
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+{{--                                                </td>--}}
+{{--                                            </tr>--}}
+{{--                                            </tbody>--}}
+{{--                                        </table>--}}
 
-                                        <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-                                </div>
-                            </div>
+{{--                                        <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                             <!--[if (mso)|(IE)]></td><![endif]-->
                             <!--[if (mso)|(IE)]><td align="center" width="271" style="background-color: #ffffff;width: 271px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
                             <div class="u-col u-col-54p33" style="max-width: 320px;min-width: 271.65px;display: table-cell;vertical-align: top;">
@@ -407,7 +407,7 @@
                                         <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
                                             <tbody>
                                             <tr>
-                                                <td style="overflow-wrap:break-word;word-break:break-word;padding:30px 10px 66px 20px;font-family:arial,helvetica,sans-serif;" align="left">
+                                                <td style="overflow-wrap:break-word;word-break:break-word;font-family:arial,helvetica,sans-serif;" align="left">
 
                                                     <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
                                                         <p style="font-size: 14px; line-height: 140%;"><span style="font-family: Montserrat, sans-serif; font-size: 14px; line-height: 19.6px;"><strong>{{$cart->name}}</strong><span style="color: #666666; font-size: 14px; line-height: 19.6px;">x {{$cart->qty}}</span></span></p>
@@ -430,7 +430,7 @@
                                         <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
                                             <tbody>
                                             <tr>
-                                                <td style="overflow-wrap:break-word;word-break:break-word;padding:30px 10px 66px 20px;font-family:arial,helvetica,sans-serif;" align="left">
+                                                <td style="overflow-wrap:break-word;word-break:break-word;font-family:arial,helvetica,sans-serif;" align="left">
 
                                                     <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
                                                         <p style="font-size: 14px; line-height: 140%;"><strong><span style="font-family: Montserrat, sans-serif; font-size: 16px; line-height: 22.4px;">${{$cart->price * $cart->qty}}</span></strong></p>

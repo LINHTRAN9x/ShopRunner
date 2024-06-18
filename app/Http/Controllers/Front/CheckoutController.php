@@ -73,7 +73,11 @@ class CheckoutController extends Controller
             $couponsInSession = $request->session()->get('coupon', []);
             if (!empty($couponsInSession)) {
                 foreach ($couponsInSession as $coupon) {
-                    $couponDiscount += ($subtotal * $coupon['coupon_number']) / 100;
+                    if ($coupon['coupon_condition'] == 1) {
+                        $couponDiscount += ($subtotal * $coupon['coupon_number']) / 100;
+                    } elseif ($coupon['coupon_condition'] == 2) {
+                        $couponDiscount += $coupon['coupon_number'];
+                    }
                 }
             }
 
@@ -240,7 +244,7 @@ class CheckoutController extends Controller
                     ]
                 ]
             ]);
-            $this->orderService->update(['status'=>Constant::ORDER_STATUS_PAID],$order->id);
+            $this->orderService->update(['payment_status'=>Constant::PAYMENT_STATUS_PAID],$order->id);
             $total = $totalAmount;
             $subTotal = Cart::subtotal();
             if ($couponsInSession){
@@ -300,7 +304,6 @@ class CheckoutController extends Controller
                     'requestType' => $requestType,
                     'signature' => $signature);
                 $result = $this->execPostRequest($endpoint, json_encode($data));
-                dd($result);
                 $jsonResult = json_decode($result, true);  // decode json
 
                 //Just a example, please check more in there
@@ -356,7 +359,7 @@ class CheckoutController extends Controller
             //Neu thanh cong
             if ($vnp_ResponseCode == 00){
                 //Update STATUS don hang:
-                $this->orderService->update(['status'=>Constant::ORDER_STATUS_PAID],$vnp_TxnRef);
+                $this->orderService->update(['payment_status'=>Constant::PAYMENT_STATUS_PAID],$vnp_TxnRef);
                $order = $this->orderService->find($vnp_TxnRef);
                 //Gui email
                 $total = $totalAmount;
@@ -430,6 +433,7 @@ class CheckoutController extends Controller
 
             if ($coupon) {
                 foreach ($coupon as $key => $cou) {
+                    $discount_condition = $cou['coupon_condition'];
                     $discount = $cou['coupon_number'];
 
                     // Truy vấn và cập nhật giá trị coupon_time trong cơ sở dữ liệu
@@ -447,6 +451,7 @@ class CheckoutController extends Controller
                 }
             } else {
                 $discount = 0;
+                $discount_condition = null;
             }
 
 
@@ -464,7 +469,7 @@ class CheckoutController extends Controller
             Session::forget('coupon');
 
 
-            return view('front.checkout.thank-you', compact('orderProducts','order','subTotal','shipping','discount','total','amount','locale','favouriteCount'));
+            return view('front.checkout.thank-you', compact('orderProducts','order','discount_condition','subTotal','shipping','discount','total','amount','locale','favouriteCount'));
         } else {
             // Xử lý khi không tìm thấy thông tin đơn hàng gần nhất
             // ...

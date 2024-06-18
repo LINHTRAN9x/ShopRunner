@@ -120,10 +120,10 @@
                                         @php
                                             $orderStatus = [
                                                 App\Utilities\Constant::ORDER_STATUS_RECEIVEORDERS => 'Receive Orders',
-                                                App\Utilities\Constant::ORDER_STATUS_UNCONFIRMED => 'Unconfirmed',
+
                                                 App\Utilities\Constant::ORDER_STATUS_CONFIRMED => 'Confirmed',
-                                                App\Utilities\Constant::ORDER_STATUS_PAID => 'Paid',
-                                                App\Utilities\Constant::ORDER_STATUS_PROCESSING => 'Processing',
+
+
                                                 App\Utilities\Constant::ORDER_STATUS_SHIPPING => 'Shipping',
                                                 App\Utilities\Constant::ORDER_STATUS_FINISH => 'Finish',
                                                 App\Utilities\Constant::ORDER_STATUS_CANCEL => 'Cancel',

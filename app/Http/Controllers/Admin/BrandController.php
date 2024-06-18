@@ -12,159 +12,133 @@ use Illuminate\Support\Facades\Log;
 
 class BrandController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $locale = Session()->get('locale');
-        $brands = Brand::paginate(5);
-        $categories = ProductCategory::all();
-        return view('admin.brand.index', ['brands' => $brands, 'categories' => $categories,'locale' => $locale]);
-    }
+        try {
+            $sortBy = $request->get('sort_by', 'created_at'); // Default column to sort by
+            $sortDirection = $request->get('sort_direction', 'desc'); // Default sort direction
+            $showDeleted = $request->get('show_deleted', 'no'); // Default to not showing deleted
+            $searchTerm = $request->get('search_term', '');
 
-    public function create()
-    {
-        $categories = Category::all();
-        $rootCategories = Category::where('parent_id', 0)->get();
-        // Generate options for the dropdown
-        $options = OptionsHelper::generateOptions($rootCategories);
-        return view('admin.brand.add', ['options' => $options]);
+            if (!in_array($sortDirection, ['asc', 'desc'])) {
+                $sortDirection = 'desc';
+            }
+            $query = Brand::query();
+            if ($showDeleted === 'yes') {
+                $query = $query->withTrashed();
+            }
+            if ($searchTerm) {
+                $query->where(function ($query) use ($searchTerm) {
+                    $query->where('id', 'like', "%$searchTerm%")
+                        ->orWhere('name', 'like', "%$searchTerm%")
+                        ->orWhere('updated_at', 'like', "%$searchTerm%")
+                        ->orWhere('created_at', 'like', "%$searchTerm%");
+                });
+            }
+
+            if ($sortBy) {
+                $query->orderBy($sortBy, $sortDirection);
+            }
+
+            $brands = $query->paginate(10);
+
+            return view('admin.brand.index', compact('brands', 'sortBy', 'sortDirection', 'searchTerm', 'showDeleted'));
+        } catch (\Exception $exception) {
+            return back()->with('error', 'Something went wrong, please try again!');
+        }
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'logo' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Adjust maximum file size as needed
-            'banner' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Adjust maximum file size as needed
-            'categories_id' => 'required|array', // Ensure that categories are submitted as an array
-            'categories_id.*' => 'exists:categories,id', // Ensure that each category ID exists in the categories table
-        ]);
-
-        DB::beginTransaction();
-
         try {
-            $bandName = $validatedData['name'];
-            $logo = $request->file('logo');
-            $logoInfoArr = ImageUploadHelper::uploadImage($logo, "brands/$bandName");
-
-            $banner = $request->file('banner');
-            $bannerInfoArr = ImageUploadHelper::uploadImage($banner, "brands/$bandName");
-
-
             $brand = Brand::create([
-                'name' => $validatedData['name'],
-                'logo_name' => $logoInfoArr['imageName'],
-                'logo_path' => $logoInfoArr['imagePath'],
-                'logo_origin_name' => $logoInfoArr['originName'],
-                'banner_name' => $bannerInfoArr['imageName'],
-                'banner_path' => $bannerInfoArr['imagePath'],
-                'banner_origin_name' => $bannerInfoArr['originName'],
+                'name' => $request->input('name'),
             ]);
-            // Attach the selected categories to the brand
-            $brand->categories()->attach($validatedData['categories_id']);
 
-            // Redirect back with success message
-            DB::commit();
-//            dd("success");
-            return redirect()->route('brands')->with('success', 'Brand created successfully.');
-        } catch (\Exception $exception) {
-            // If an exception occurs, rollback the transaction
-            DB::rollback();
-            // Return an error response or handle the exception
-            $detailedError = 'Message: '.$exception->getMessage() . ' --- File: ' . $exception->getFile() . ' --- Line: ' . $exception->getLine();
-            Log::error($detailedError);
-
-            // Flash the detailed error message to the session
-            return back()->with('error', $detailedError);
+            if ($brand) {
+                session()->flash('success', 'Brand created successfully');
+                return response()->json(['success' => true, 'message' => 'Brand created successfully']);
+            } else {
+                session()->flash('error', 'Failed to create Brand');
+                return response()->json(['success' => false, 'message' => 'Brand  created unsuccessfully.']);
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', 'Failed to create Brand');
+            return response()->json(['success' => false, 'message' => 'Failed to create Brand', 'error' => $e->getMessage()], 500);
         }
     }
 
-    public function edit($id)
+    public function edit(Request $request ,Brand $brand)
     {
-        $rootCategories = Category::where('parent_id', 0)->get();
+        try {
+            if($brand)
+                return response()->json(['success'=> true,'brand' => $brand]);
+            else
+                return response()->json(['success'=> false,'message' => 'failed to Get brand data ']);
 
-        $brand = Brand::findOrFail($id);
-        $selectedCategories = $brand->categories()->get();
-
-        $options = OptionsHelper::generateOptionsWithSelected($rootCategories, $selectedCategories);
-        return view('admin.brand.edit', ['brand' => $brand, 'options' => $options]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Brand $brand)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
-            'logo' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Adjust maximum file size as needed
-            'banner' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Adjust maximum file size as needed
-            'categories_id' => 'required|array', // Ensure that categories are submitted as an array
-            'categories_id.*' => 'exists:categories,id', // Ensure that each category ID exists in the categories table
         ]);
+        // Begin database transaction
         DB::beginTransaction();
+
         try {
-            // Find the brand by its ID
-            $brand = Brand::findOrFail($id);
+            if ($brand)
+            {
+                $brand->name = $request->name;
+                $brand->save();
 
-            $bandName = $validatedData['name'];
-            $logo = $request->file('logo');
-            $logoInfoArr = ImageUploadHelper::uploadImage($logo, "brands/$bandName");
+                session()->flash('success', 'Brand updated successfully');
+                DB::commit();
+                return response()->json(['success' => true, 'message' => 'Brand updated successfully']);
+            }else {
+                session()->flash('error', 'Failed to create product!');
+                return response()->json(['success' => false, 'message' => 'Brand updated unsuccessfully.']);
+            }
 
-            $banner = $request->file('banner');
-            $bannerInfoArr = ImageUploadHelper::uploadImage($banner, "brands/$bandName");
-
-            $brand->update([
-                'name' => $validatedData['name'],
-                'logo_name' => $logoInfoArr['imageName'],
-                'logo_path' => $logoInfoArr['imagePath'],
-                'logo_origin_name' => $logoInfoArr['originName'],
-                'banner_name' => $bannerInfoArr['imageName'],
-                'banner_path' => $bannerInfoArr['imagePath'],
-                'banner_origin_name' => $bannerInfoArr['originName'],
-            ]);
-            // Save the brand changes
-            $brand->save();
-            // Sync the categories associated with the brand
-            $brand->categories()->sync($validatedData['categories_id']);
-
-            // Commit the transaction
-            DB::commit();
-
-            // Redirect back with success message
-            return redirect()->route('brands.edit', $id)->with('success', 'Brand updated successfully.');
-        } catch (\Exception $exception) {
-            // If an exception occurs, rollback the transaction
+        } catch (\Exception $e) {
+            // Rollback transaction on error
             DB::rollback();
-            $detailedError = 'Message: '.$exception->getMessage() . ' --- File: ' . $exception->getFile() . ' --- Line: ' . $exception->getLine();
-            Log::error($detailedError);
 
-            // Flash the detailed error message to the session
-            return back()->with('error', $detailedError);
+            return response()->json(['success' => false, 'message' => 'Failed to update Brand', 'error' => $e->getMessage()], 500);
         }
     }
 
     public function delete($id)
     {
-        $brand = Brand::findOrFail($id);
-        $brand->delete();
-        return redirect(route('brands'));
-    }
-
-    public function restore(Request $request)
-    {
-
-        $id = $request->input('id');
-        // Fetch categories based on showDeleted value
-        $softDeleted = Brand::withTrashed()->find($id);
-//        dd($softDeleted);
-        // Check if the category exists
-        if ($softDeleted) {
-
-            $softDeleted->restore();
-
-            // Category found, you can perform further actions here
-            return response()->json(['brand' => $softDeleted]);
+        $brand = Brand::withTrashed()->find($id);
+        if ($brand) {
+            $brand->delete();
+//            session()->flash('success', 'Brand deleted successfully');
+            $html = view('admin.partials._brand_buttons', ['brand' => $brand])->render();
+            return response()->json(['success' => true, 'message' => 'Brand deleted successfully', 'html' => $html]);
         } else {
-            // Category not found
-            return response()->json(['message' => 'Brand not found.'], 404);
+            session()->flash('error', 'Brand not found.');
+            return response()->json(['success' => false, 'message' => 'Brand not found.']);
         }
     }
+
+
+    public function restore($id)
+    {
+        $brand = Brand::withTrashed()->find($id);
+        if ($brand) {
+            $brand->restore();
+//            session()->flash('success', 'Brand restored successfully');
+            $html = view('admin.partials._brand_buttons', ['brand' => $brand])->render();
+            return response()->json(['success' => true, 'message' => 'Brand restored successfully', 'html' => $html]);
+        } else {
+            session()->flash('error', 'Brand not found.');
+            return response()->json(['success' => false, 'message' => 'Brand not found.']);
+        }
+    }
+
 
 }
